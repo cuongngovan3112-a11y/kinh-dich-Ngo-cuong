@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Minh Dịch Ngô Cương ☯</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#F8F6F1;--surface:#FFFFFF;--border:#E5E2DA;--border2:#D4D0C6;
+  --text1:#1C1A17;--text2:#5C5852;--text3:#9A9590;
+  --accent:#2C2926;--accent2:#6B5F4A;
+  --can-bg:#FEF3E2;--can-bd:#E8A83A;--can-tx:#5C3A10;
+  --khon-bg:#EDF5E1;--khon-bd:#7CB85A;--khon-tx:#2A5014;
+  --chan-bg:#FEF0EC;--chan-bd:#E07050;--chan-tx:#5A2010;
+  --ton-bg:#E2F5EE;--ton-bd:#3CB88A;--ton-tx:#0A4030;
+  --kham-bg:#E8F2FC;--kham-bd:#4A90D8;--kham-tx:#0A3060;
+  --ly-bg:#FCEAEA;--ly-bd:#D85050;--ly-tx:#680A0A;
+  --can2-bg:#EFEDE6;--can2-bd:#9A9080;--can2-tx:#2A2820;
+  --doai-bg:#EEEDFB;--doai-bd:#8A85E0;--doai-tx:#20185A;
+  --green:#166534;--green-bg:#DCFCE7;
+  --red:#991B1B;--red-bg:#FEE2E2;
+}
+html,body{height:100%;font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text1);font-size:14px;line-height:1.5}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+textarea,input{font-family:inherit}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+
+/* ── Layout ── */
+#app{display:flex;flex-direction:column;height:100vh;overflow:hidden}
+header{display:flex;align-items:center;justify-content:space-between;padding:10px 20px;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0;gap:12px}
+.logo{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.logo-sym{font-size:24px;line-height:1}
+.logo-text{font-family:'EB Garamond',serif;font-size:17px;font-weight:600;letter-spacing:-.3px;color:var(--text1)}
+.logo-sub{font-size:11px;color:var(--text3);margin-top:1px}
+nav{display:flex;gap:3px;flex-wrap:wrap}
+.nav-btn{padding:6px 13px;border-radius:8px;font-size:13px;font-weight:400;color:var(--text2);transition:all .15s}
+.nav-btn:hover{background:#F0EDE6;color:var(--text1)}
+.nav-btn.active{background:var(--accent);color:#fff;font-weight:500}
+main{flex:1;overflow:hidden;display:flex;position:relative}
+
+/* ── Views ── */
+.view{display:none;flex:1;overflow:hidden}
+.view.active{display:flex}
+
+/* ── Bat Qua view ── */
+#v-trigrams{flex-direction:row}
+.tg-grid-wrap{flex:1;overflow-y:auto;padding:20px 24px}
+.tg-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:680px;margin:0 auto}
+.tg-card{border-radius:12px;padding:14px 12px 12px;border:1.5px solid transparent;cursor:pointer;transition:all .15s;text-align:left}
+.tg-card:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.06)}
+.tg-card.sel{border-width:2px}
+.tg-sym{font-size:28px;line-height:1;margin-bottom:6px}
+.tg-name{font-family:'EB Garamond',serif;font-size:16px;font-weight:600;margin-bottom:2px}
+.tg-el{font-size:11px;opacity:.7;margin-bottom:8px}
+.tg-tags{display:flex;flex-wrap:wrap;gap:4px}
+.tg-tag{font-size:10px;padding:2px 7px;border-radius:20px}
+.tg-detail{width:300px;border-left:1px solid var(--border);overflow-y:auto;padding:20px;background:var(--surface);flex-shrink:0;display:none}
+.tg-detail.open{display:block}
+.td-back{font-size:11px;color:var(--text3);margin-bottom:14px;cursor:pointer;display:inline-flex;align-items:center;gap:4px}
+.td-back:hover{color:var(--text1)}
+.td-sym{font-size:48px;margin-bottom:8px}
+.td-name{font-family:'EB Garamond',serif;font-size:22px;font-weight:600;margin-bottom:2px}
+.td-el{font-size:12px;color:var(--text3);margin-bottom:12px}
+.td-nature{font-size:13px;font-style:italic;color:var(--text2);margin-bottom:12px;line-height:1.5}
+.td-kws{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:16px}
+.td-sec{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;margin-top:14px}
+.td-body{font-size:13px;color:var(--text2);line-height:1.65}
+.sec-title{font-family:'EB Garamond',serif;font-size:18px;font-weight:500;color:var(--text1);margin-bottom:4px}
+.sec-sub{font-size:12px;color:var(--text3);margin-bottom:16px}
+
+/* ── Matrix view ── */
+#v-matrix{flex-direction:column;overflow-y:auto;padding:20px 24px}
+.matrix-inner{max-width:780px;margin:0 auto;width:100%}
+.mx-wrap{overflow-x:auto;margin-bottom:12px}
+.mx-grid{display:grid;grid-template-columns:44px repeat(8,1fr);gap:3px;min-width:420px}
+.mx-cell{height:36px;display:flex;align-items:center;justify-content:center;font-size:11px;border-radius:6px;cursor:pointer;transition:all .12s;border:1.5px solid transparent;font-weight:500}
+.mx-cell:hover{transform:scale(1.1);z-index:2;position:relative}
+.mx-cell.corner,.mx-cell.row-hd,.mx-cell.col-hd{cursor:default;font-size:11px}
+.mx-cell.corner{background:transparent}
+.mx-preview{border-radius:10px;border:1px solid var(--border);background:var(--surface);padding:14px 16px;min-height:52px}
+.mx-preview-empty{color:var(--text3);font-size:12px;font-style:italic}
+.mx-preview-name{font-family:'EB Garamond',serif;font-size:17px;font-weight:500;color:var(--text1);margin-bottom:3px}
+.mx-preview-meta{font-size:11px;color:var(--text3);margin-bottom:6px}
+.mx-preview-meaning{font-size:12px;color:var(--text2);line-height:1.6}
+
+/* ── Reading view ── */
+#v-reading{flex-direction:row}
+.input-panel{width:360px;border-right:1px solid var(--border);overflow-y:auto;padding:22px 20px;background:var(--surface);flex-shrink:0}
+.ip-title{font-family:'EB Garamond',serif;font-size:18px;font-weight:500;margin-bottom:4px}
+.ip-sub{font-size:12px;color:var(--text3);margin-bottom:16px;line-height:1.5}
+.ip-textarea{width:100%;border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--text1);resize:none;outline:none;line-height:1.6;background:var(--bg);transition:border .15s}
+.ip-textarea:focus{border-color:var(--border2)}
+.ip-meta{display:flex;align-items:center;justify-content:space-between;margin-top:6px;margin-bottom:12px}
+.ip-char{font-size:11px;color:var(--text3)}
+.ip-cat{font-size:11px;padding:3px 9px;border-radius:20px}
+.ip-submit{width:100%;padding:11px;border-radius:10px;background:var(--accent);color:#fff;font-size:13px;font-weight:500;transition:all .15s;margin-bottom:14px}
+.ip-submit:hover{background:#3D3A35}
+.ip-submit:disabled{background:#C8C4BC;cursor:not-allowed;color:#8A8680}
+.ip-div{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.ip-div-line{flex:1;height:1px;background:var(--border)}
+.ip-div-text{font-size:10px;color:var(--text3)}
+.ip-examples{display:flex;flex-direction:column;gap:6px}
+.ip-ex{text-align:left;font-size:11px;color:var(--text2);background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:8px 10px;line-height:1.5;transition:all .12s}
+.ip-ex:hover{border-color:var(--border2);background:#F0EDE6}
+.ip-ex-num{color:var(--text3);margin-right:4px}
+
+/* Reading output */
+.reading-out{flex:1;overflow-y:auto;padding:22px 24px}
+.ro-inner{max-width:680px;margin:0 auto}
+.ro-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:60%;gap:14px;text-align:center;opacity:.4}
+.ro-empty-sym{font-size:56px}
+.ro-empty-text{font-size:13px;color:var(--text2)}
+.ro-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;height:60%;gap:14px}
+.ro-loading-sym{font-size:48px;animation:spin 3s linear infinite}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.ro-loading-text{font-size:13px;color:var(--text3)}
+
+/* Reading card */
+.rc-echo{border-radius:10px;background:var(--bg);border:1px solid var(--border);padding:12px 14px;margin-bottom:18px}
+.rc-echo-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.rc-echo-text{font-size:12px;color:var(--text2);line-height:1.55;margin-bottom:6px}
+.rc-echo-foot{display:flex;align-items:center;gap:8px}
+.rc-badge{font-size:10px;padding:2px 8px;border-radius:20px;background:var(--border);color:var(--text2)}
+.rc-conf{font-size:10px;color:var(--text3)}
+.rc-hex-head{display:flex;align-items:flex-start;gap:14px;padding-bottom:16px;border-bottom:1px solid var(--border);margin-bottom:16px}
+.rc-hex-sym{font-size:44px;line-height:1;flex-shrink:0}
+.rc-hex-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px}
+.rc-hex-name{font-family:'EB Garamond',serif;font-size:26px;font-weight:600;line-height:1.1;margin-bottom:4px}
+.rc-hex-core{font-size:13px;color:var(--text2);font-style:italic}
+.rc-sec-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.rc-tri-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.rc-tri-card{border-radius:10px;padding:12px;border-left:3px solid}
+.rc-tri-role{font-size:10px;opacity:.7;margin-bottom:4px}
+.rc-tri-sym{font-size:22px;line-height:1;margin-bottom:3px}
+.rc-tri-name{font-family:'EB Garamond',serif;font-size:15px;font-weight:600;margin-bottom:1px}
+.rc-tri-el{font-size:10px;opacity:.7;margin-bottom:7px}
+.rc-tri-body{font-size:11px;line-height:1.55;opacity:.9}
+.rc-inter{border-radius:10px;background:var(--bg);border:1px solid var(--border);padding:10px 14px;margin-bottom:16px}
+.rc-inter-label{font-size:10px;color:var(--text3);margin-bottom:3px}
+.rc-inter-body{font-size:12px;color:var(--text2);line-height:1.6}
+.rc-section{margin-bottom:16px}
+.rc-body{font-size:13px;color:var(--text2);line-height:1.7}
+.rc-context{border-radius:10px;border-left:4px solid var(--border2);background:var(--surface);padding:12px 16px;margin-bottom:16px}
+.rc-context-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px}
+.rc-context-body{font-size:13px;color:var(--text1);font-weight:500;line-height:1.65}
+.rc-timing{font-size:12px;color:var(--text3);font-style:italic;line-height:1.6;margin-bottom:16px}
+.rc-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.rc-do{background:var(--green-bg);border-radius:10px;padding:12px}
+.rc-avoid{background:var(--red-bg);border-radius:10px;padding:12px}
+.rc-action-title{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.rc-do .rc-action-title{color:var(--green)}
+.rc-avoid .rc-action-title{color:var(--red)}
+.rc-action-list{display:flex;flex-direction:column;gap:5px}
+.rc-action-item{font-size:11px;line-height:1.5;display:flex;gap:6px}
+.rc-do .rc-action-item{color:#14532D}
+.rc-avoid .rc-action-item{color:#7F1D1D}
+.rc-action-arrow{flex-shrink:0;opacity:.6}
+.rc-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:16px}
+.rc-tag{font-size:10px;background:var(--border);color:var(--text2);padding:2px 8px;border-radius:20px}
+.rc-btns{display:flex;gap:8px;padding-top:14px;border-top:1px solid var(--border)}
+.rc-btn-save{flex:1;padding:10px;border-radius:9px;background:var(--accent);color:#fff;font-size:12px;font-weight:500;transition:all .15s}
+.rc-btn-save:hover{background:#3D3A35}
+.rc-btn-save.saved{background:#166534;color:#fff}
+.rc-btn-reset{flex:1;padding:10px;border-radius:9px;background:var(--bg);border:1px solid var(--border);color:var(--text2);font-size:12px;transition:all .15s}
+.rc-btn-reset:hover{border-color:var(--border2);color:var(--text1)}
+
+/* ── History view ── */
+#v-history{flex-direction:column;overflow-y:auto;padding:20px 24px}
+.history-inner{max-width:680px;margin:0 auto;width:100%}
+.hist-empty{color:var(--text3);font-size:13px;font-style:italic;padding:20px 0}
+.hist-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:border .12s}
+.hist-card:hover{border-color:var(--border2)}
+.hist-top{display:flex;align-items:start;justify-content:space-between;gap:10px;margin-bottom:5px}
+.hist-name{font-family:'EB Garamond',serif;font-size:15px;font-weight:500;color:var(--text1)}
+.hist-date{font-size:11px;color:var(--text3);flex-shrink:0}
+.hist-input{font-size:11px;color:var(--text2);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
+/* footer */
+footer{padding:6px 20px;border-top:1px solid var(--border);display:flex;justify-content:space-between;flex-shrink:0;background:var(--surface)}
+footer span{font-size:10px;color:var(--text3)}
+
+
+footer{padding:6px 20px;border-top:1px solid var(--border);display:flex;justify-content:space-between;flex-shrink:0;background:var(--surface)}
+footer span{font-size:10px;color:var(--text3)}
+
+/* ── Concepts view ── */
+#v-concepts{flex-direction:column;overflow-y:auto}
+.kn-wrap{max-width:760px;margin:0 auto;padding:24px 24px 40px;width:100%}
+.kn-hero{text-align:center;padding:28px 20px 24px;margin-bottom:28px;border-radius:16px;background:linear-gradient(135deg,#2C2926 0%,#4A3F34 100%);color:#fff;position:relative;overflow:hidden}
+.kn-hero::before{content:'☯';position:absolute;font-size:180px;opacity:.06;top:-20px;right:-20px;line-height:1}
+.kn-hero-sym{font-size:36px;margin-bottom:10px}
+.kn-hero-title{font-family:'EB Garamond',serif;font-size:26px;font-weight:600;margin-bottom:8px;letter-spacing:-.3px}
+.kn-hero-sub{font-size:13px;opacity:.75;line-height:1.6;max-width:480px;margin:0 auto}
+.kn-quote{margin-top:16px;font-family:'EB Garamond',serif;font-style:italic;font-size:15px;opacity:.85;line-height:1.6}
+.kn-toc{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:28px}
+.kn-toc-btn{font-size:11px;padding:5px 12px;border-radius:20px;background:var(--surface);border:1px solid var(--border);color:var(--text2);cursor:pointer;transition:all .15s}
+.kn-toc-btn:hover{border-color:var(--border2);color:var(--text1);background:#F0EDE6}
+.kn-section{margin-bottom:32px;scroll-margin-top:20px}
+.kn-sec-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;cursor:pointer;user-select:none}
+.kn-sec-num{width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.kn-sec-title{font-family:'EB Garamond',serif;font-size:19px;font-weight:600;color:var(--text1)}
+.kn-sec-arrow{margin-left:auto;font-size:12px;color:var(--text3);transition:transform .2s}
+.kn-sec-arrow.open{transform:rotate(180deg)}
+.kn-sec-body{display:none}
+.kn-sec-body.open{display:block}
+.kn-lead{font-size:13px;color:var(--text2);line-height:1.75;margin-bottom:14px}
+.kn-callout{border-radius:10px;padding:12px 16px;margin-bottom:12px;font-size:13px;line-height:1.65}
+.kn-callout-amber{background:#FEF3E2;border-left:3px solid #E8A83A;color:#5C3A10}
+.kn-callout-blue{background:#E8F2FC;border-left:3px solid #4A90D8;color:#0A3060}
+.kn-callout-green{background:#EDF5E1;border-left:3px solid #7CB85A;color:#2A5014}
+.kn-callout-red{background:#FCEAEA;border-left:3px solid #D85050;color:#680A0A}
+.kn-callout-stone{background:#EFEDE6;border-left:3px solid #9A9080;color:#2A2820}
+.kn-callout strong{display:block;font-weight:600;margin-bottom:4px}
+/* Timeline */
+.kn-timeline{position:relative;padding-left:24px}
+.kn-timeline::before{content:'';position:absolute;left:7px;top:6px;bottom:6px;width:2px;background:var(--border)}
+.kn-tl-item{position:relative;margin-bottom:16px}
+.kn-tl-dot{position:absolute;left:-24px;top:4px;width:14px;height:14px;border-radius:50%;background:var(--accent);border:2px solid var(--bg);flex-shrink:0}
+.kn-tl-name{font-weight:600;font-size:13px;color:var(--text1);margin-bottom:2px}
+.kn-tl-era{font-size:10px;color:var(--text3);margin-bottom:4px}
+.kn-tl-body{font-size:12px;color:var(--text2);line-height:1.6}
+/* Principle cards */
+.kn-principles{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.kn-pr-card{border-radius:10px;border:1px solid var(--border);padding:14px;background:var(--surface);cursor:pointer;transition:all .15s;text-align:left}
+.kn-pr-card:hover{border-color:var(--border2);background:#FAFAF8}
+.kn-pr-card.active{border-color:var(--accent);background:var(--bg)}
+.kn-pr-icon{font-size:20px;margin-bottom:6px}
+.kn-pr-name{font-family:'EB Garamond',serif;font-size:14px;font-weight:600;color:var(--text1);margin-bottom:3px}
+.kn-pr-short{font-size:11px;color:var(--text3);margin-bottom:6px}
+.kn-pr-detail{display:none;font-size:12px;color:var(--text2);line-height:1.65;margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}
+.kn-pr-card.active .kn-pr-detail{display:block}
+.kn-pr-ex{font-size:11px;color:var(--accent2);font-style:italic;margin-top:6px;line-height:1.55}
+/* Misconception cards */
+.kn-mc-card{border-radius:10px;border:1px solid #FEE2E2;background:#FFF8F8;padding:14px;margin-bottom:10px}
+.kn-mc-wrong{display:flex;align-items:flex-start;gap:8px;margin-bottom:8px}
+.kn-mc-x{color:#D85050;font-weight:700;font-size:14px;flex-shrink:0;margin-top:1px}
+.kn-mc-wrong-text{font-size:13px;color:#780A0A;font-weight:500}
+.kn-mc-right{display:flex;align-items:flex-start;gap:8px;padding-top:8px;border-top:1px solid #FEE2E2}
+.kn-mc-check{color:#166534;font-weight:700;font-size:14px;flex-shrink:0;margin-top:1px}
+.kn-mc-right-text{font-size:12px;color:#14532D;line-height:1.6}
+/* App domain cards */
+.kn-domain-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.kn-domain-card{border-radius:10px;border:1px solid var(--border);padding:13px;background:var(--surface)}
+.kn-domain-icon{font-size:18px;margin-bottom:6px}
+.kn-domain-name{font-size:13px;font-weight:600;color:var(--text1);margin-bottom:4px}
+.kn-domain-body{font-size:11px;color:var(--text2);line-height:1.6}
+.kn-domain-key{font-size:10px;color:var(--text3);margin-top:5px}
+/* Divider */
+.kn-divider{height:1px;background:var(--border);margin:20px 0}
+/* Practice items */
+.kn-practice{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
+.kn-practice:last-child{border-bottom:none}
+.kn-p-num{width:24px;height:24px;border-radius:50%;background:#F0EDE6;color:var(--accent2);font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.kn-p-title{font-size:13px;font-weight:600;color:var(--text1);margin-bottom:3px}
+.kn-p-body{font-size:12px;color:var(--text2);line-height:1.6}
+.kn-p-tag{display:inline-block;font-size:10px;padding:1px 7px;border-radius:20px;background:var(--border);color:var(--text2);margin-top:5px}
+</style>
+</head>
+<body>
+
+<div id="app">
+  <header>
+    <div class="logo">
+      <div class="logo-sym">☯</div>
+      <div>
+        <div class="logo-text">Minh Dịch: Ngô Cương 0909877386 </div>
+        <div class="logo-sub">Kinh Dịch ứng dụng thực dụng</div>
+      </div>
+    </div>
+    <nav>
+      <button class="nav-btn" data-view="concepts">📖 Khái niệm</button>
+      <button class="nav-btn" data-view="trigrams">☯ Bát Quái</button>
+      <button class="nav-btn" data-view="matrix">⊞ Ma trận 64</button>
+      <button class="nav-btn active" data-view="reading">✦ Tra quẻ</button>
+      <button class="nav-btn" data-view="history">◷ Lịch sử</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- BAT QUA VIEW -->
+    <div class="view" id="v-trigrams">
+      <div class="tg-grid-wrap">
+        <div style="max-width:680px;margin:0 auto 16px">
+          <div class="sec-title">Bát Quái — 8 quẻ đơn</div>
+          <div class="sec-sub">Mỗi quẻ đơn là một nguyên mẫu tình huống. Bấm vào quẻ để xem chi tiết.</div>
+        </div>
+        <div class="tg-grid" id="trigramGrid"></div>
+      </div>
+      <div class="tg-detail" id="trigramDetail">
+        <div class="td-back" onclick="closeTgDetail()">← Đóng</div>
+        <div class="td-sym" id="td-sym"></div>
+        <div class="td-name" id="td-name"></div>
+        <div class="td-el" id="td-el"></div>
+        <div class="td-nature" id="td-nature"></div>
+        <div class="td-kws" id="td-kws"></div>
+        <div class="td-sec">Mô tả</div>
+        <div class="td-body" id="td-desc"></div>
+        <div class="td-sec">Khi nào xuất hiện</div>
+        <div class="td-body" id="td-life"></div>
+      </div>
+    </div>
+
+    <!-- MATRIX VIEW -->
+    <div class="view" id="v-matrix">
+      <div class="matrix-inner">
+        <div class="sec-title">Ma trận 64 quẻ kép</div>
+        <div class="sec-sub" style="margin-bottom:14px">Hàng = quẻ dưới (nội tại) · Cột = quẻ trên (môi trường). Diagonal = 8 quẻ thuần. Bấm ô để xem quẻ.</div>
+        <div class="mx-wrap"><div class="mx-grid" id="matrixGrid"></div></div>
+        <div class="mx-preview" id="matrixPreview">
+          <div class="mx-preview-empty">Hover hoặc bấm ô để xem tên quẻ và ý nghĩa</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- READING VIEW -->
+    <div class="view active" id="v-reading">
+      <div class="input-panel">
+        <div class="ip-title">Mô tả tình huống</div>
+        <div class="ip-sub">Viết tự nhiên bằng tiếng Việt. Không cần biết quẻ nào — hệ thống tự phân tích.</div>
+        <textarea class="ip-textarea" id="ipTextarea" rows="5" maxlength="1000" placeholder="Ví dụ: Tôi đang phân vân về việc có nên thay đổi công việc không..."></textarea>
+        <div class="ip-meta">
+          <span class="ip-char" id="ipChar">0/1000</span>
+          <span class="ip-cat" id="ipCat" style="display:none"></span>
+        </div>
+        <button class="ip-submit" id="ipSubmit" disabled onclick="doReading()">Xem quẻ phù hợp &nbsp;⌘↵</button>
+        <div class="ip-div"><div class="ip-div-line"></div><span class="ip-div-text">hoặc thử ví dụ</span><div class="ip-div-line"></div></div>
+        <div class="ip-examples" id="ipExamples"></div>
+      </div>
+      <div class="reading-out">
+        <div class="ro-inner" id="readingOut">
+          <div class="ro-empty">
+            <div class="ro-empty-sym">☯</div>
+            <div class="ro-empty-text">Nhập tình huống bên trái<br>kết quả sẽ xuất hiện ở đây</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HISTORY VIEW -->
+    <div class="view" id="v-history">
+      <div class="history-inner">
+        <div class="sec-title">Lịch sử tra quẻ</div>
+        <div class="sec-sub" id="histSub" style="margin-bottom:14px"></div>
+        <div id="histList"></div>
+      </div>
+    </div>
+
+    <!-- CONCEPTS VIEW -->
+    <div class="view" id="v-concepts">
+      <div class="kn-wrap">
+
+        <!-- Hero -->
+        <div class="kn-hero">
+          <div class="kn-hero-sym">☯</div>
+          <div class="kn-hero-title">Kinh Dịch là gì?</div>
+          <div class="kn-hero-sub">Hướng dẫn nhập môn dành cho người hoàn toàn mới — đọc trong 5 phút, hiểu để dùng cả đời.</div>
+          <div class="kn-quote">"Kinh Dịch không dạy bạn nhìn vào tương lai.<br>Nó dạy bạn nhìn rõ hiện tại — để hành động không hối tiếc."</div>
+        </div>
+
+        <!-- TOC -->
+        <div class="kn-toc">
+          <button class="kn-toc-btn" onclick="openSection('s1')">1. Kinh Dịch là gì</button>
+          <button class="kn-toc-btn" onclick="openSection('s2')">2. Lịch sử hình thành</button>
+          <button class="kn-toc-btn" onclick="openSection('s3')">3. Khái niệm nền tảng</button>
+          <button class="kn-toc-btn" onclick="openSection('s4')">4. Ứng dụng đời sống</button>
+          <button class="kn-toc-btn" onclick="openSection('s5')">5. Hiểu lầm cần tránh</button>
+        </div>
+
+        <!-- SECTION 1: Kinh Dịch là gì -->
+        <div class="kn-section" id="s1">
+          <div class="kn-sec-header" onclick="toggleSection('s1')">
+            <div class="kn-sec-num">1</div>
+            <div class="kn-sec-title">Kinh Dịch là gì?</div>
+            <div class="kn-sec-arrow open" id="arr-s1">▾</div>
+          </div>
+          <div class="kn-sec-body open" id="body-s1">
+            <p class="kn-lead">Kinh Dịch là một <strong>hệ thống tư duy</strong> giúp con người hiểu quy luật thay đổi của mọi sự vật — để sống và hành động đúng lúc, đúng chỗ. Chỉ vậy thôi. Không có gì huyền bí hơn.</p>
+
+            <div class="kn-callout kn-callout-amber">
+              <strong>Hình ảnh dễ hiểu nhất</strong>
+              Người xưa không có Excel, không có SWOT, không có tư vấn chiến lược. Kinh Dịch chính là "bộ khung phân tích tình huống" của họ — giúp đánh giá thời thế và đưa ra quyết định đúng đắn trong chiến tranh, nông nghiệp, cai trị.
+            </div>
+
+            <div class="kn-callout kn-callout-blue">
+              <strong>Mục đích gốc — không phải bói toán</strong>
+              Kinh Dịch ban đầu được dùng bởi vua chúa, tướng lĩnh để <em>phân tích tình huống</em>. Giống như người hiện đại dùng phân tích dữ liệu — không phải để đoán số phận, mà để hiểu tình thế và hành động khôn ngoan hơn.
+            </div>
+
+            <div class="kn-callout kn-callout-green">
+              <strong>Câu chốt để nhớ</strong>
+              Kinh Dịch là cuốn sách dạy bạn <em>đọc tình huống và sống đúng thời</em> — không phải sách đoán số phận.
+            </div>
+          </div>
+        </div>
+        <div class="kn-divider"></div>
+
+        <!-- SECTION 2: Lịch sử -->
+        <div class="kn-section" id="s2">
+          <div class="kn-sec-header" onclick="toggleSection('s2')">
+            <div class="kn-sec-num">2</div>
+            <div class="kn-sec-title">Lịch sử hình thành</div>
+            <div class="kn-sec-arrow open" id="arr-s2">▾</div>
+          </div>
+          <div class="kn-sec-body open" id="body-s2">
+            <p class="kn-lead">Kinh Dịch không ra đời trong một ngày — nó được xây dựng và hoàn thiện qua hàng nghìn năm bởi nhiều thế hệ.</p>
+            <div class="kn-timeline">
+              <div class="kn-tl-item">
+                <div class="kn-tl-dot"></div>
+                <div class="kn-tl-name">Phục Hy — Kiến trúc sư đầu tiên</div>
+                <div class="kn-tl-era">~5.000 năm trước · Kỷ nguyên thần thoại [CẦN XÁC MINH]</div>
+                <div class="kn-tl-body">Quan sát thiên nhiên và vẽ ra 8 ký hiệu căn bản gọi là Bát Quái — biểu tượng hóa 8 lực lượng cơ bản của vũ trụ: Trời, Đất, Sấm, Gió, Nước, Lửa, Núi, Hồ.</div>
+              </div>
+              <div class="kn-tl-item">
+                <div class="kn-tl-dot"></div>
+                <div class="kn-tl-name">Văn Vương — Người hệ thống hóa</div>
+                <div class="kn-tl-era">~thế kỷ 11 TCN · Thời nhà Chu</div>
+                <div class="kn-tl-body">Ghép 8 quẻ đơn thành 64 quẻ kép và viết "Thoán từ" — lời giải thích lành/dữ cho từng quẻ. Truyền thuyết kể ông viết trong lúc bị cầm tù. Đây là thời điểm Kinh Dịch trở thành hệ thống 64 quẻ hoàn chỉnh.</div>
+              </div>
+              <div class="kn-tl-item">
+                <div class="kn-tl-dot"></div>
+                <div class="kn-tl-name">Chu Công — Người phân tích vi mô</div>
+                <div class="kn-tl-era">~thế kỷ 11 TCN · Con trai Văn Vương</div>
+                <div class="kn-tl-body">Viết "Hào từ" cho 384 hào — phân tích chi tiết từng vị trí cụ thể trong mỗi quẻ, như một bộ hướng dẫn chi tiết đến từng tình huống nhỏ.</div>
+              </div>
+              <div class="kn-tl-item">
+                <div class="kn-tl-dot"></div>
+                <div class="kn-tl-name">Khổng Tử — Người triết học hóa</div>
+                <div class="kn-tl-era">551–479 TCN · Kỷ nguyên triết học</div>
+                <div class="kn-tl-body">Soạn "Thập Dực" (Mười Cánh) — bộ bình giảng triết học sâu sắc, chuyển hóa Kinh Dịch từ công cụ chiêm đoán thành hệ thống triết học tư thân. Nhờ Khổng Tử, Kinh Dịch trở thành kinh điển số 1 trong Tứ Thư Ngũ Kinh.</div>
+              </div>
+            </div>
+            <div class="kn-callout kn-callout-stone" style="margin-top:10px">
+              <strong>Vì sao lại có dạng bói toán?</strong>
+              Qua nhiều thế kỷ, khi Kinh Dịch lan rộng ra dân gian, các biểu tượng của nó bị dùng vào mục đích bói toán. Đây là sự lệch hướng tự nhiên — tương tự như nhiều hệ thống triết học khác bị biến tướng thành mê tín khi xuống đến dân gian.
+            </div>
+          </div>
+        </div>
+        <div class="kn-divider"></div>
+
+        <!-- SECTION 3: Khái niệm nền tảng -->
+        <div class="kn-section" id="s3">
+          <div class="kn-sec-header" onclick="toggleSection('s3')">
+            <div class="kn-sec-num">3</div>
+            <div class="kn-sec-title">Các khái niệm nền tảng</div>
+            <div class="kn-sec-arrow open" id="arr-s3">▾</div>
+          </div>
+          <div class="kn-sec-body open" id="body-s3">
+            <p class="kn-lead">Toàn bộ Kinh Dịch xây dựng trên 5 nguyên lý lớn. Hiểu 5 điều này — bạn đã nắm được 80% tinh thần của hệ thống. Bấm vào từng thẻ để xem chi tiết.</p>
+
+            <div class="kn-principles">
+              <button class="kn-pr-card active" onclick="togglePrinciple(this)">
+                <div class="kn-pr-icon">☯</div>
+                <div class="kn-pr-name">Âm – Dương</div>
+                <div class="kn-pr-short">Đối lập và bổ sung</div>
+                <div class="kn-pr-detail">Mọi sự vật đều tồn tại trong cặp đối lập tương hỗ. Không có gì hoàn toàn tốt hoặc hoàn toàn xấu — mọi thứ đều mang mầm của điều ngược lại.
+                  <div class="kn-pr-ex">Ví dụ: Bạn vừa mất việc (âm — khó khăn). Đây đồng thời là lúc buộc phải học kỹ năng mới, tìm ngành phù hợp hơn — những điều không dám làm khi còn việc cũ (dương — cơ hội).</div>
+                  <div class="kn-pr-ex" style="margin-top:4px;color:#9A9590;font-style:normal">Câu chốt: <em>Trong cái khó có cái may — trong cái may có cái khó đang ủ.</em></div>
+                </div>
+              </button>
+              <button class="kn-pr-card" onclick="togglePrinciple(this)">
+                <div class="kn-pr-icon">🔄</div>
+                <div class="kn-pr-name">Biến Dịch</div>
+                <div class="kn-pr-short">Mọi thứ đều thay đổi</div>
+                <div class="kn-pr-detail">Không có trạng thái nào là cố định mãi mãi — kể cả những gì đang tốt, đang xấu, đang ổn định. Bám víu vào hiện tại như thể nó sẽ tồn tại mãi là nguồn gốc của nhiều khổ đau.
+                  <div class="kn-pr-ex">Ví dụ: Chủ tiệm tạp hóa kinh doanh ổn 10 năm, không chịu thay đổi khi app giao hàng nổi lên. Đến khi khách giảm một nửa thì đã muộn để thích nghi.</div>
+                  <div class="kn-pr-ex" style="margin-top:4px;color:#9A9590;font-style:normal">Câu chốt: <em>Không có gì là mãi mãi — kể cả khó khăn lẫn thành công.</em></div>
+                </div>
+              </button>
+              <button class="kn-pr-card" onclick="togglePrinciple(this)">
+                <div class="kn-pr-icon">⚓</div>
+                <div class="kn-pr-name">Bất Dịch</div>
+                <div class="kn-pr-short">Quy luật không đổi</div>
+                <div class="kn-pr-detail">Dù vạn vật luôn thay đổi, vẫn tồn tại những quy luật nền tảng bất biến — như nhân quả, như chu kỳ tự nhiên. Bề mặt thay đổi liên tục, nhưng bên dưới luôn có quy luật.
+                  <div class="kn-pr-ex">Ví dụ: Trong công sở, dù sếp thay đổi, văn hóa thay đổi — người chăm chỉ, trung thực và có năng lực vẫn được trọng dụng. Quy luật đó không đổi dù môi trường nào.</div>
+                  <div class="kn-pr-ex" style="margin-top:4px;color:#9A9590;font-style:normal">Câu chốt: <em>Bề mặt thay đổi không ngừng — nhưng quy luật bên dưới thì không.</em></div>
+                </div>
+              </button>
+              <button class="kn-pr-card" onclick="togglePrinciple(this)">
+                <div class="kn-pr-icon">🎯</div>
+                <div class="kn-pr-name">Giản Dịch</div>
+                <div class="kn-pr-short">Phức tạp ẩn sự đơn giản</div>
+                <div class="kn-pr-detail">Dù thực tại phức tạp đến đâu, bản chất của nó đều có thể quy về những nguyên lý đơn giản. Sự hiểu biết thật sự là khi nắm được cái đơn giản nằm sau cái phức tạp.
+                  <div class="kn-pr-ex">Ví dụ: Vợ chồng cãi nhau về tiền bạc, dạy con, mua nhà — nhìn có vẻ nhiều vấn đề. Nhưng gốc rễ thường chỉ là "hai người chưa có thói quen ngồi lại nói chuyện thật lòng."</div>
+                  <div class="kn-pr-ex" style="margin-top:4px;color:#9A9590;font-style:normal">Câu chốt: <em>Phức tạp là bề mặt — đơn giản mới là gốc rễ.</em></div>
+                </div>
+              </button>
+              <button class="kn-pr-card" onclick="togglePrinciple(this)" style="grid-column:span 2">
+                <div class="kn-pr-icon">⏱</div>
+                <div class="kn-pr-name">Thời – Vị</div>
+                <div class="kn-pr-short">Đúng thời điểm, đúng vị trí</div>
+                <div class="kn-pr-detail">Hành động đúng phải đồng thời phù hợp với thời điểm (khi nào làm) và vị trí (ai làm, ở đâu, trong vai trò gì). Cùng một hành động — đúng thời đúng vị thì thành công, sai thời sai vị thì thất bại.
+                  <div class="kn-pr-ex">Ví dụ: Nhân viên giỏi đề xuất ý tưởng mới ngay lúc công ty đang khủng hoảng tài chính — sếp không có tâm trí để nghe. Sáu tháng sau, khi tình hình ổn định, người khác đề xuất tương tự và được chấp nhận ngay. Không phải ý tưởng kém — mà sai thời điểm.</div>
+                  <div class="kn-pr-ex" style="margin-top:4px;color:#9A9590;font-style:normal">Câu chốt: <em>Đúng việc, đúng lúc, đúng chỗ — ba cái đúng mới tạo ra kết quả.</em></div>
+                </div>
+              </button>
+            </div>
+
+            <div class="kn-divider"></div>
+            <p class="kn-lead" style="margin-bottom:10px"><strong>Từ 8 quẻ đơn → 64 quẻ kép</strong></p>
+            <div class="kn-callout kn-callout-amber">
+              <strong>Tại sao chỉ cần hiểu 8 quẻ đơn là đủ 80%?</strong>
+              64 quẻ kép không phải 64 thứ riêng biệt — chúng là tổ hợp của 8 quẻ đơn ghép với nhau theo công thức 8 × 8 = 64. Mỗi quẻ kép gồm một quẻ dưới (nội tại của bạn) và một quẻ trên (môi trường bên ngoài). Hiểu 8 quẻ đơn → tự suy ra ý nghĩa của mọi quẻ kép mà không cần tra bảng.
+            </div>
+          </div>
+        </div>
+        <div class="kn-divider"></div>
+
+        <!-- SECTION 4: Ứng dụng -->
+        <div class="kn-section" id="s4">
+          <div class="kn-sec-header" onclick="toggleSection('s4')">
+            <div class="kn-sec-num">4</div>
+            <div class="kn-sec-title">Ứng dụng vào đời sống</div>
+            <div class="kn-sec-arrow open" id="arr-s4">▾</div>
+          </div>
+          <div class="kn-sec-body open" id="body-s4">
+            <p class="kn-lead">Kinh Dịch không phải thứ để học thuộc rồi để trưng bày — nó có giá trị khi được áp dụng vào tình huống thực tế. Dưới đây là 4 lĩnh vực cốt lõi.</p>
+            <div class="kn-domain-grid">
+              <div class="kn-domain-card">
+                <div class="kn-domain-icon">🧠</div>
+                <div class="kn-domain-name">Phát triển bản thân</div>
+                <div class="kn-domain-body">Nhận ra bạn không bao giờ "xong" việc phát triển — thế giới thay đổi, bạn cũng cần thay đổi. Đứng yên trong thế giới đang chuyển động chính là đang đi lùi.</div>
+                <div class="kn-domain-key">Nguyên lý: Biến Dịch</div>
+              </div>
+              <div class="kn-domain-card">
+                <div class="kn-domain-icon">⚖️</div>
+                <div class="kn-domain-name">Ra quyết định quan trọng</div>
+                <div class="kn-domain-body">Trước khi quyết định, hỏi: Tôi đang ở pha nào? Đang lên hay đang xuống? Tôi có đủ nội lực để đón nhận thay đổi này không? Điều gì là giá trị cốt lõi tôi phải giữ?</div>
+                <div class="kn-domain-key">Nguyên lý: Thời – Vị</div>
+              </div>
+              <div class="kn-domain-card">
+                <div class="kn-domain-icon">👥</div>
+                <div class="kn-domain-name">Các mối quan hệ</div>
+                <div class="kn-domain-body">Quan hệ tốt không phải khi cả hai đều giống nhau — mà khi hai người biết bổ sung cho nhau. Khác biệt là tự nhiên; vấn đề là không biết để khác biệt bổ sung thay vì đối đầu.</div>
+                <div class="kn-domain-key">Nguyên lý: Âm – Dương</div>
+              </div>
+              <div class="kn-domain-card">
+                <div class="kn-domain-icon">💼</div>
+                <div class="kn-domain-name">Công việc & Sự nghiệp</div>
+                <div class="kn-domain-body">Biết mình đang ở pha nào trong sự nghiệp (học / xây dựng / tạo ảnh hưởng). Tìm quy luật bất biến của ngành mình. Ra quyết định từ thế mạnh — không phải từ mệt mỏi hay áp lực.</div>
+                <div class="kn-domain-key">Nguyên lý: Bất Dịch + Thời – Vị</div>
+              </div>
+            </div>
+
+            <div class="kn-callout kn-callout-blue">
+              <strong>5 bài thực hành ngay hôm nay</strong>
+            </div>
+            <div>
+              <div class="kn-practice">
+                <div class="kn-p-num">1</div>
+                <div>
+                  <div class="kn-p-title">Nhìn lại một khó khăn đang có</div>
+                  <div class="kn-p-body">Lấy một tờ giấy, viết ra một vấn đề bạn đang gặp. Sau đó hỏi: "Mặt tích cực nào đang ẩn trong vấn đề này? Nếu đây là cơ hội, nó là cơ hội gì?"</div>
+                  <span class="kn-p-tag">Âm – Dương · 10 phút · Tối nay</span>
+                </div>
+              </div>
+              <div class="kn-practice">
+                <div class="kn-p-num">2</div>
+                <div>
+                  <div class="kn-p-title">Kiểm kê một kỹ năng đang lỗi thời</div>
+                  <div class="kn-p-body">Liệt kê 3 kỹ năng chính trong công việc. Với mỗi kỹ năng, hỏi: "Cái này còn phù hợp với xu hướng 3 năm tới không?"</div>
+                  <span class="kn-p-tag">Biến Dịch · Giờ nghỉ trưa</span>
+                </div>
+              </div>
+              <div class="kn-practice">
+                <div class="kn-p-num">3</div>
+                <div>
+                  <div class="kn-p-title">Tìm một quy luật không đổi trong nghề</div>
+                  <div class="kn-p-body">Hỏi người đi trước bạn 10 năm: "Theo anh/chị, trong ngành này thứ gì là không bao giờ thay đổi dù công nghệ hay thị trường biến động?"</div>
+                  <span class="kn-p-tag">Bất Dịch · Nhắn tin mentor ngay hôm nay</span>
+                </div>
+              </div>
+              <div class="kn-practice">
+                <div class="kn-p-num">4</div>
+                <div>
+                  <div class="kn-p-title">Đơn giản hóa một vấn đề phức tạp</div>
+                  <div class="kn-p-body">Chọn vấn đề đang "treo lơ lửng" vì cảm thấy quá phức tạp. Hỏi: "Nếu chỉ có MỘT điều cốt lõi nhất gây ra mọi thứ này, nó là gì?"</div>
+                  <span class="kn-p-tag">Giản Dịch · 15 phút · Tắt điện thoại</span>
+                </div>
+              </div>
+              <div class="kn-practice">
+                <div class="kn-p-num">5</div>
+                <div>
+                  <div class="kn-p-title">Phân biệt "chờ đúng lúc" với "sợ hãi"</div>
+                  <div class="kn-p-body">Chọn một quyết định đang trì hoãn. Hỏi thẳng: "Tôi đang chờ đúng lúc — hay tôi đang sợ hãi và gọi đó là chưa đúng lúc?"</div>
+                  <span class="kn-p-tag">Thời – Vị · Trước khi ngủ · Viết vào nhật ký</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="kn-divider"></div>
+
+        <!-- SECTION 5: Hiểu lầm -->
+        <div class="kn-section" id="s5">
+          <div class="kn-sec-header" onclick="toggleSection('s5')">
+            <div class="kn-sec-num">5</div>
+            <div class="kn-sec-title">3 hiểu lầm nguy hiểm cần tránh</div>
+            <div class="kn-sec-arrow open" id="arr-s5">▾</div>
+          </div>
+          <div class="kn-sec-body open" id="body-s5">
+            <p class="kn-lead">Những hiểu lầm dưới đây không chỉ khiến bạn dùng sai Kinh Dịch — mà còn gây hại cho cách bạn ra quyết định trong cuộc sống.</p>
+
+            <div class="kn-mc-card">
+              <div class="kn-mc-wrong">
+                <div class="kn-mc-x">✗</div>
+                <div class="kn-mc-wrong-text">"Kinh Dịch là sách bói — dùng để đoán tương lai"</div>
+              </div>
+              <div class="kn-mc-right">
+                <div class="kn-mc-check">✓</div>
+                <div class="kn-mc-right-text">Kinh Dịch là khung phân tích tình huống hiện tại, không phải công cụ tiên tri. Giống như bác sĩ không đoán bệnh nhân sống bao lâu — họ phân tích triệu chứng và đưa ra hướng điều trị. Phụ thuộc vào "quẻ" bên ngoài thay vì rèn năng lực phán đoán bên trong là hướng ngược chiều.</div>
+              </div>
+            </div>
+
+            <div class="kn-mc-card">
+              <div class="kn-mc-wrong">
+                <div class="kn-mc-x">✗</div>
+                <div class="kn-mc-wrong-text">"Kinh Dịch dạy rằng số phận đã định — không thể thay đổi"</div>
+              </div>
+              <div class="kn-mc-right">
+                <div class="kn-mc-check">✓</div>
+                <div class="kn-mc-right-text">Đây là cách hiểu ngược hoàn toàn. Kinh Dịch nhấn mạnh Biến Dịch — mọi thứ đều thay đổi, kể cả hoàn cảnh của bạn. Hiểu quy luật không có nghĩa là chịu đựng quy luật — mà là biết cách đi cùng quy luật thay vì chống lại nó vô ích. "Mệnh tôi vậy rồi" là bẫy tư duy thụ động, không phải triết lý Kinh Dịch.</div>
+              </div>
+            </div>
+
+            <div class="kn-mc-card">
+              <div class="kn-mc-wrong">
+                <div class="kn-mc-x">✗</div>
+                <div class="kn-mc-wrong-text">"Học Kinh Dịch là phải thuộc 64 quẻ — rất khó và mất nhiều năm"</div>
+              </div>
+              <div class="kn-mc-right">
+                <div class="kn-mc-check">✓</div>
+                <div class="kn-mc-right-text">64 quẻ là công cụ ứng dụng cụ thể — không phải nền tảng cốt lõi. Người hiểu sâu 5 nguyên lý cốt lõi và áp dụng được vào cuộc sống có ích hơn nhiều so với người thuộc tên 64 quẻ mà không hiểu bản chất. Bắt đầu từ nguyên lý, không bắt đầu từ hệ thống ký hiệu.</div>
+              </div>
+            </div>
+
+            <div class="kn-callout kn-callout-stone" style="margin-top:16px">
+              <strong>Tinh hoa cuối cùng</strong>
+              Ba bài học lớn nhất của Kinh Dịch không liên quan đến quẻ nào cả: (1) Không có tốt xấu tuyệt đối — chỉ có đúng hay sai thời điểm và vị thế. (2) Bạn có thể làm chủ hoàn cảnh bằng cách hiểu quy luật. (3) Biết điểm dừng — triết lý vĩ đại nhất là nhận thức sự "Thái quá." Vũ trụ nhắc nhở con người luôn giữ chữ "Trung" (cân bằng).
+            </div>
+          </div>
+        </div>
+
+      </div><!-- end kn-wrap -->
+    </div><!-- end v-concepts -->
+
+  </main>
+
+  <footer>
+    <span>Minh Dịch Ngô Cương · Kinh Dịch ứng dụng thực dụng</span>
+    <span>v1.0 · Offline</span>
+  </footer>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// DATA — 8 TRIGRAMS
+// ═══════════════════════════════════════════════════════════════
+const TRIGRAMS = {
+  can:{id:'can',name:'Càn',sym:'☰',el:'Trời / Kim',nature:'Sức mạnh thuần túy, không ngừng vươn lên',
+    kw:['Sức mạnh','Kiên định','Lãnh đạo','Quyết đoán','Tiên phong'],
+    desc:'Càn là quẻ dương thuần túy — ba vạch liền. Đại diện cho bầu trời, sức mạnh sáng tạo nguyên thủy, ý chí không khuất phục.',
+    life:'Xuất hiện khi bạn cần quyết đoán, dẫn dắt, hoặc giữ vững lập trường. Người lãnh đạo, doanh nhân khởi nghiệp, khoảnh khắc cần dũng khí.',
+    css:{bg:'var(--can-bg)',bd:'var(--can-bd)',tx:'var(--can-tx)'}},
+  khon:{id:'khon',name:'Khôn',sym:'☷',el:'Đất / Thổ',nature:'Bao dung, chịu đựng, nuôi dưỡng',
+    kw:['Nhẫn nại','Nuôi dưỡng','Chấp nhận','Bền bỉ','Hỗ trợ'],
+    desc:'Khôn là quẻ âm thuần túy — ba vạch đứt. Đại diện cho đất mẹ, sức chịu đựng vô hạn. Không phải yếu đuối — đây là sức mạnh của bao dung.',
+    life:'Xuất hiện khi cần ở vai hỗ trợ, chăm sóc, hoặc chịu đựng giai đoạn khó. Giai đoạn tích lũy âm thầm trước khi vươn lên.',
+    css:{bg:'var(--khon-bg)',bd:'var(--khon-bd)',tx:'var(--khon-tx)'}},
+  chan:{id:'chan',name:'Chấn',sym:'☳',el:'Sấm / Mộc',nature:'Chuyển động đột ngột, khai mở, cú sốc khởi động',
+    kw:['Đột phá','Khởi đầu','Cú sốc','Chuyển động','Năng lượng'],
+    desc:'Chấn là tiếng sấm — năng lượng bùng phát đột ngột. Tượng trưng cho sự khởi đầu mạnh mẽ và biến cố bất ngờ buộc ta phải thức tỉnh.',
+    life:'Xuất hiện khi có tin bất ngờ, biến cố lớn, hoặc cần một cú hích. Nhảy việc đột xuất, cơ hội lớn xuất hiện không báo trước.',
+    css:{bg:'var(--chan-bg)',bd:'var(--chan-bd)',tx:'var(--chan-tx)'}},
+  ton:{id:'ton',name:'Tốn',sym:'☴',el:'Gió / Mộc',nature:'Thấm sâu, kiên nhẫn, ảnh hưởng dần dần',
+    kw:['Kiên trì','Thấm dần','Mềm mại','Linh hoạt','Ảnh hưởng'],
+    desc:'Tốn là gió — len lỏi vào mọi ngóc ngách, không gây ồn ào nhưng thay đổi mọi thứ theo thời gian. Tượng trưng cho sự thuyết phục từ từ.',
+    life:'Xuất hiện khi cần thuyết phục từ từ, xây dựng thương hiệu cá nhân, nuôi dưỡng mối quan hệ lâu dài.',
+    css:{bg:'var(--ton-bg)',bd:'var(--ton-bd)',tx:'var(--ton-tx)'}},
+  kham:{id:'kham',name:'Khảm',sym:'☵',el:'Nước / Thủy',nature:'Nguy hiểm, áp lực, vùng nước xiết',
+    kw:['Áp lực','Nguy hiểm','Thử thách','Kiên trì','Vượt qua'],
+    desc:'Khảm là nước chảy qua vùng hiểm trở. Nguy hiểm là có thật, nhưng nước không hỏi — nó cứ tìm đường chảy về phía trước.',
+    life:'Xuất hiện khi bị dồn vào góc tường, nhiều áp lực cùng lúc. Nợ nần, khủng hoảng, mâu thuẫn chưa giải quyết được.',
+    css:{bg:'var(--kham-bg)',bd:'var(--kham-bd)',tx:'var(--kham-tx)'}},
+  ly:{id:'ly',name:'Ly',sym:'☲',el:'Lửa / Hỏa',nature:'Sáng rõ, tỏa sáng, nhận thức',
+    kw:['Sáng suốt','Rõ ràng','Tỏa sáng','Nhận thức','Phụ thuộc'],
+    desc:'Ly là lửa — sáng rõ, ấm áp, nhưng cần bám vào nhiên liệu để cháy. Tượng trưng cho sự sáng suốt và khả năng nhìn thấu bản chất.',
+    life:'Xuất hiện khi cần nhìn thấu bản chất, đưa ra sự rõ ràng. Phân tích tình huống phức tạp, lúc cần tỏa sáng đúng chỗ.',
+    css:{bg:'var(--ly-bg)',bd:'var(--ly-bd)',tx:'var(--ly-tx)'}},
+  can2:{id:'can2',name:'Cấn',sym:'☶',el:'Núi / Thổ',nature:'Dừng lại, tĩnh lặng, biết khi nào nên ngừng',
+    kw:['Dừng lại','Thiền định','Ranh giới','Biết đủ','Tĩnh tại'],
+    desc:'Cấn là núi — đứng im, vững chắc, không bị cuốn theo. Tượng trưng cho sức mạnh của sự dừng lại đúng lúc. Núi không di chuyển — đó là tự chủ.',
+    life:'Xuất hiện khi cần dừng lại thay vì lao về phía trước. Burnout, cần tái tạo năng lượng, giai đoạn cần nhìn lại.',
+    css:{bg:'var(--can2-bg)',bd:'var(--can2-bd)',tx:'var(--can2-tx)'}},
+  doai:{id:'doai',name:'Đoài',sym:'☱',el:'Hồ / Kim',nature:'Vui tươi, giao tiếp, kết nối',
+    kw:['Kết nối','Vui vẻ','Giao tiếp','Hài lòng','Hòa giải'],
+    desc:'Đoài là hồ nước — phản chiếu ánh trời, mặt phẳng lặng, mang lại sự vui tươi và kết nối. Tượng trưng cho niềm vui trong giao tiếp.',
+    life:'Xuất hiện khi cần xây dựng quan hệ, mở lòng, hoặc tìm niềm vui. Hòa giải mâu thuẫn, giai đoạn nạp năng lượng từ người khác.',
+    css:{bg:'var(--doai-bg)',bd:'var(--doai-bd)',tx:'var(--doai-tx)'}},
+};
+const TG_LIST = ['can','khon','chan','ton','kham','ly','can2','doai'];
+const MX_ORDER = ['can','doai','ly','chan','ton','kham','can2','khon'];
+const MX_LABELS = ['Càn','Đoài','Ly','Chấn','Tốn','Khảm','Cấn','Khôn'];
+
+// ═══════════════════════════════════════════════════════════════
+// DATA — 64 HEXAGRAMS (key fields for full reading)
+// ═══════════════════════════════════════════════════════════════
+const HEX = [
+{id:1,name:'Thuần Càn',up:'can',lo:'can',sym:'䷀',
+  core:'Sức mạnh thuần túy — tiến mạnh không ngừng',
+  ext:'Càn là quẻ dương hoàn toàn. Đây là sức mạnh nguyên thủy của trời, năng lượng sáng tạo không ngừng. Thời điểm tốt để hành động quyết đoán, dẫn dắt và tiên phong. Nhưng sức mạnh quá mức mà thiếu linh hoạt sẽ vỡ.',
+  ctx:{business:'Thời điểm tốt để ra quyết định lớn, mở rộng kinh doanh. Lãnh đạo cần tự tin nhưng không độc đoán.',investment:'Sức mạnh thị trường đang lên. Đây là thời điểm có lợi nhưng cần biết khi nào dừng.',relationship:'Bạn đang ở thế mạnh — hãy chủ động. Nhưng mối quan hệ cần sự bổ sung, không chỉ sức mạnh.',family:'Người trụ cột cần phát huy vai trò lãnh đạo. Thời điểm đưa ra quyết định quan trọng.',career:'Thời điểm tốt để tiến lên, nhận trách nhiệm lớn hơn. Tự tin hành động.',self_dev:'Quyết tâm cao — thời điểm tốt để học điều lớn, thiết lập thói quen mạnh mẽ.',decision:'Hành động quyết đoán sẽ mang lại kết quả. Thời điểm cho sự do dự đã qua.'},
+  do:['Hành động quyết đoán và rõ ràng','Đứng vững với nguyên tắc','Dẫn dắt bằng tầm nhìn','Tin vào sức mạnh của mình'],
+  avoid:['Độc đoán không lắng nghe','Cứng nhắc khi cần linh hoạt','Kiêu ngạo vì đang ở thế mạnh'],
+  det:{up:'Càn trên — môi trường đang ủng hộ sức mạnh và quyết đoán',lo:'Càn dưới — nội lực của bạn đang ở mức cao',int:'Hai lực Càn hội tụ tạo ra năng lượng cực lớn — cần kênh đúng hướng',time:'Thời điểm hành động — không phải lúc chờ đợi'},
+  tags:['sức mạnh','lãnh đạo','tiên phong','quyết đoán','khởi nghiệp']},
+{id:2,name:'Thuần Khôn',up:'khon',lo:'khon',sym:'䷁',
+  core:'Tiếp nhận thuần túy — nuôi dưỡng và chịu đựng',
+  ext:'Khôn là quẻ âm hoàn toàn. Đây là sức mạnh của đất mẹ: chịu đựng, nuôi dưỡng, tiếp nhận. Không phải yếu đuối — đây là nền tảng vững chắc cho mọi sự phát triển.',
+  ctx:{business:'Thời điểm xây dựng nền tảng, không mở rộng ồ ạt. Củng cố hệ thống, quy trình, đội ngũ.',investment:'Thị trường cần thời gian tích lũy. Giữ vững, không hoảng loạn.',relationship:'Cần sự kiên nhẫn và nuôi dưỡng. Lắng nghe nhiều hơn, chia sẻ nhiều hơn.',family:'Thời điểm chăm sóc, hàn gắn, xây dựng sự gắn kết gia đình.',career:'Giai đoạn tích lũy kỹ năng âm thầm. Làm tốt công việc hiện tại.',self_dev:'Học hỏi bằng sự kiên nhẫn. Tích lũy và phát triển từ từ.',decision:'Chưa phải lúc hành động lớn. Hãy chuẩn bị và chờ thời điểm chín muồi.'},
+  do:['Kiên nhẫn và bền bỉ','Lắng nghe và tiếp nhận','Xây dựng nền tảng vững','Chăm sóc những gì đang có'],
+  avoid:['Cố gắng dẫn đầu khi chưa đến lúc','Vội vàng khi cần kiên nhẫn','Kháng cự sự thay đổi tự nhiên'],
+  det:{up:'Khôn trên — môi trường đang cần sự tiếp nhận và hỗ trợ',lo:'Khôn dưới — nội tâm đang ở trạng thái tiếp nhận',int:'Hai lực Khôn tạo ra vùng đất màu mỡ — mọi hạt giống có thể lớn lên nhưng cần thời gian',time:'Giai đoạn tích lũy — kết quả sẽ đến từ từ'},
+  tags:['kiên nhẫn','nuôi dưỡng','nền tảng','hỗ trợ','bền bỉ']},
+{id:3,name:'Thủy Lôi Truân',up:'kham',lo:'chan',sym:'䷂',
+  core:'Khởi đầu gian nan — cây non vượt mặt đất cứng',
+  ext:'Truân là quẻ của sự khởi đầu đầy thử thách. Như mầm cây vất vả vượt qua lớp đất cứng mà ra. Khó khăn ban đầu không phải dấu hiệu thất bại — đó là bản chất tự nhiên của mọi khởi đầu thực sự.',
+  ctx:{business:'Dự án mới gặp trở ngại ban đầu là bình thường. Hãy tìm cộng sự và cố vấn. Đừng bỏ cuộc.',investment:'Vị thế mới đang hình thành. Chưa rõ kết quả — cần thời gian và kiên nhẫn.',relationship:'Mối quan hệ mới đang trải qua những thử thách đầu tiên. Đây là giai đoạn xây dựng.',family:'Gia đình đang xây dựng nền tảng mới. Những khó khăn hiện tại là bình thường.',career:'Công việc mới gặp trở ngại đầu tiên. Hãy tìm người hướng dẫn.',self_dev:'Hành trình học hỏi đang bắt đầu khó. Đây là dấu hiệu tốt — đang vượt qua giới hạn cũ.',decision:'Sẽ gặp trở ngại triển khai ban đầu. Chuẩn bị cho giai đoạn khó khởi đầu.'},
+  do:['Tìm cộng sự và người hướng dẫn có kinh nghiệm','Kiên nhẫn với tiến độ chậm','Xây dựng cấu trúc và tổ chức'],
+  avoid:['Bỏ cuộc sớm vì thấy khó','Cố làm một mình khi cần trợ giúp','Mất kiên nhẫn với tiến trình'],
+  det:{up:'Khảm trên — môi trường đang đặt ra nhiều thử thách từ bên ngoài',lo:'Chấn dưới — có năng lượng và ý chí khởi đầu mạnh mẽ',int:'Năng lượng khởi đầu (Chấn) gặp áp lực (Khảm) — như mầm cây gặp đất cứng',time:'Giai đoạn khởi đầu — có thể kéo dài hơn dự kiến, đừng vội'},
+  tags:['khởi đầu','khó khăn','kiên nhẫn','dự án mới','vượt trở ngại']},
+{id:4,name:'Sơn Thủy Mông',up:'can2',lo:'kham',sym:'䷃',
+  core:'Giai đoạn học hỏi — tích lũy tri thức dưới sự hướng dẫn',
+  ext:'Mông là quẻ của người học — như cây non đang tích nhựa dưới mặt đất. Ánh sáng chưa rọi thẳng vào, nhưng sự phát triển đang diễn ra. Cần thầy, cần kỷ luật, cần kiên nhẫn. Đây là giai đoạn đúng — không phải chậm trễ.',
+  ctx:{business:'Đang trong giai đoạn học về ngành này. Đừng vội mở rộng — hãy học sâu trước.',investment:'Chưa đủ kiến thức để đầu tư lớn. Học thêm, quan sát thị trường, bắt đầu nhỏ.',relationship:'Mối quan hệ đang trong giai đoạn tìm hiểu. Đừng vội kết luận.',family:'Giai đoạn dạy dỗ hoặc học hỏi lại về gia đình. Cần kiên nhẫn.',career:'Đang ở giai đoạn học nghề. Đầu tư vào kỹ năng — kết quả sẽ đến sau.',self_dev:'Đây chính xác là quẻ của giai đoạn anh đang trải qua — tích lũy tri thức và tư duy.',decision:'Chưa đủ thông tin để quyết định. Hãy học thêm, tìm hiểu thêm trước.'},
+  do:['Tìm thầy và người hướng dẫn tốt','Học với sự khiêm tốn và cởi mở','Kiên nhẫn với tiến trình học','Thực hành từng bước nhỏ'],
+  avoid:['Giả vờ hiểu khi chưa hiểu','Vội áp dụng khi chưa nắm vững','Mất kiên nhẫn và bỏ cuộc giữa chừng'],
+  det:{up:'Cấn trên — môi trường yêu cầu bạn dừng lại và học, không phải hành động ngay',lo:'Khảm dưới — đang trong vùng áp lực và chưa rõ hướng đi — trạng thái người học',int:'Áp lực của Khảm gặp sự dừng lại của Cấn — tạo ra không gian học hỏi sâu sắc',time:'Giai đoạn tích lũy — có thể cảm thấy chậm, nhưng đang tích lũy đúng cách'},
+  tags:['học hỏi','tích lũy','phát triển bản thân','cần thầy','kiên nhẫn']},
+{id:5,name:'Thủy Thiên Nhu',up:'kham',lo:'can',sym:'䷄',
+  core:'Chờ đợi đúng cách — thời điểm chưa đến',
+  ext:'Nhu là quẻ của sự chờ đợi thông thái — không phải thụ động mà là chuẩn bị trong khi chờ. Có sức mạnh (Càn) nhưng phía trước là vùng nước (Khảm). Người chờ đúng cách là người dùng thời gian chờ để tích lũy.',
+  ctx:{business:'Thời điểm chưa chín muồi. Hãy chuẩn bị kỹ trong khi chờ.',investment:'Chưa phải thời điểm vào thị trường. Giữ thanh khoản và quan sát.',relationship:'Cần thêm thời gian phát triển tự nhiên. Đừng ép.',career:'Cơ hội tốt hơn đang đến — chờ trong khi nâng cao năng lực bản thân.',self_dev:'Đây là thời gian học và chuẩn bị — không phải lúc trình diễn.',decision:'Chưa đủ điều kiện để quyết định. Chờ thêm thông tin và thời điểm.'},
+  do:['Kiên nhẫn chờ đúng thời điểm','Dùng thời gian chờ để chuẩn bị','Tích lũy nguồn lực','Duy trì tinh thần tốt'],
+  avoid:['Hành động vội vàng vì chán chờ','Thụ động hoàn toàn trong khi chờ','Lo lắng thái quá về tương lai'],
+  det:{up:'Khảm trên — phía trước có thử thách, chưa phải lúc lao vào',lo:'Càn dưới — sức mạnh và năng lực đang được tích lũy',int:'Sức mạnh cần chờ qua vùng nguy hiểm — chờ đợi của người có sức mạnh',time:'Thời gian chờ — có thể ngắn hoặc dài, cần tiếp tục chuẩn bị'},
+  tags:['chờ đợi','chuẩn bị','kiên nhẫn','tích lũy','sắp đến']},
+{id:11,name:'Địa Thiên Thái',up:'khon',lo:'can',sym:'䷊',
+  core:'Hanh thông — trời đất gặp nhau, thuận lợi',
+  ext:'Thái là quẻ của sự thuận lợi và hanh thông. Trời (Càn) ở dưới đang vươn lên, đất (Khôn) ở trên đang xuống — hai lực gặp nhau tạo ra sự hài hòa. Đây là thời kỳ hoàng kim, nhưng cần giữ sự khiêm tốn.',
+  ctx:{business:'Thời điểm thuận lợi để mở rộng, ký kết, ra mắt sản phẩm.',investment:'Thị trường đang trong giai đoạn tăng. Có thể tận dụng nhưng đừng tham lam.',relationship:'Mối quan hệ đang ở giai đoạn tốt nhất — lý tưởng để tiến thêm bước, kể cả hôn nhân.',family:'Gia đình đang hòa thuận — tận dụng để xây dựng và gắn kết thêm.',career:'Thời điểm tốt để thăng tiến, nhận dự án lớn.',self_dev:'Đang ở giai đoạn phát triển tốt — tận dụng để học thêm, mở rộng.',decision:'Thời điểm thuận lợi để quyết định và hành động.'},
+  do:['Tận dụng thời điểm thuận lợi','Giữ sự khiêm tốn khi đang thành công','Chia sẻ thành công với người xung quanh','Chuẩn bị cho giai đoạn tiếp theo'],
+  avoid:['Kiêu ngạo và tự mãn khi thuận lợi','Bỏ lỡ cơ hội vì sợ hãi','Không chuẩn bị cho lúc không thuận'],
+  det:{up:'Khôn trên — môi trường đang tiếp nhận và hỗ trợ',lo:'Càn dưới — nội lực mạnh mẽ, sẵn sàng',int:'Sức mạnh từ dưới (Càn) gặp sự tiếp nhận từ trên (Khôn) — dòng năng lượng hanh thông',time:'Thời kỳ hoàng kim — tận dụng nhưng đừng lãng phí'},
+  tags:['hanh thông','thuận lợi','thành công','hôn nhân','cơ hội lớn']},
+{id:29,name:'Thuần Khảm',up:'kham',lo:'kham',sym:'䷜',
+  core:'Nguy hiểm kép — vùng nước xiết bao vây tứ phía',
+  ext:'Thuần Khảm là quẻ của nguy hiểm bao vây từ tứ phía. Nhưng nước không hỏi ghềnh đá có nguy không — nó cứ tìm đường chảy. Bí quyết: giữ vững nội tâm, tiếp tục di chuyển.',
+  ctx:{business:'Khủng hoảng kinh doanh nghiêm trọng. Giữ bình tĩnh, giải quyết từng vấn đề một.',investment:'Thị trường đang rất xấu. Cắt giảm rủi ro và bảo toàn vốn.',relationship:'Áp lực từ nhiều phía. Giữ vững nền tảng mối quan hệ.',family:'Giai đoạn khó khăn gia đình chồng chất. Cần kiên nhẫn và trợ giúp từ bên ngoài.',career:'Giai đoạn khó khăn sự nghiệp nghiêm trọng. Cần trợ giúp và không hành động vội.',self_dev:'Đang ở trong áp lực bốn phía. Đây là lúc thử thách thật sự.',decision:'Không phải lúc quyết định lớn. Ổn định trước rồi mới quyết định.'},
+  do:['Giữ vững nội tâm và không hoảng loạn','Di chuyển từng bước một','Tìm trợ giúp từ người có kinh nghiệm','Tập trung vào việc có thể kiểm soát'],
+  avoid:['Hoảng loạn và đưa ra quyết định cảm xúc','Đứng im hoàn toàn khi cần hành động','Vùng vẫy tất cả hướng cùng lúc','Cô lập bản thân trong khủng hoảng'],
+  det:{up:'Khảm trên — áp lực từ môi trường bên ngoài',lo:'Khảm dưới — áp lực đang ảnh hưởng đến nội tâm',int:'Hai lớp áp lực — bên ngoài và bên trong cùng lúc — nhưng nước vẫn tìm được đường ra',time:'Giai đoạn khó nhất — nhưng sẽ qua. Nước luôn tìm được đường ra'},
+  tags:['khủng hoảng','nguy hiểm','áp lực','vượt khó','kiên trì']},
+{id:32,name:'Lôi Phong Hằng',up:'chan',lo:'ton',sym:'䷟',
+  core:'Bền vững có nguyên tắc — cam kết lâu dài dựa trên sự rõ ràng',
+  ext:'Hằng là quẻ của sự bền vững thật sự — không phải vì không dám thay đổi, mà vì hiểu rõ giá trị cốt lõi và cam kết với nó. Như sấm và gió luôn đi cùng nhau — bền vững trong sự vận động.',
+  ctx:{business:'Xây dựng mô hình kinh doanh bền vững dựa trên giá trị cốt lõi, không phải xu hướng.',investment:'Đầu tư dài hạn dựa trên giá trị cơ bản, không theo cảm xúc thị trường.',relationship:'Mối quan hệ bền vững đến từ sự rõ ràng và cam kết — lý tưởng cho hôn nhân khi đã có nền tảng.',family:'Xây dựng gia đình trên giá trị cốt lõi chung, không phải hoàn cảnh.',career:'Cam kết với con đường nghề nghiệp đã chọn — nhất quán và bền vững.',self_dev:'Xây dựng thói quen bền vững — nhỏ nhưng nhất quán mỗi ngày.',decision:'Quyết định cam kết dài hạn — khi đã rõ ràng về giá trị cốt lõi.'},
+  do:['Xác định rõ giá trị cốt lõi trước khi cam kết','Nhất quán trong hành động dài hạn','Xây dựng thói quen bền vững','Cam kết dựa trên sự rõ ràng, không phải sợ hãi'],
+  avoid:['Cam kết vì áp lực bên ngoài','Từ bỏ cam kết khi gặp khó khăn nhỏ','Nhầm lẫn giữa bền vững và cứng nhắc'],
+  det:{up:'Chấn trên — có sự chuyển động và năng lượng trong sự bền vững — không phải trì trệ',lo:'Tốn dưới — sự thấm sâu và kiên nhẫn tạo nền cho sự bền vững',int:'Năng lượng (Chấn) được nuôi dưỡng bởi sự kiên nhẫn (Tốn) — tạo ra sự bền vững năng động',time:'Thích hợp cho cam kết dài hạn — hôn nhân, sự nghiệp, hoặc dự án lớn'},
+  tags:['bền vững','cam kết','hôn nhân','nhất quán','lâu dài','giá trị cốt lõi']},
+{id:37,name:'Phong Hỏa Gia Nhân',up:'ton',lo:'ly',sym:'䷤',
+  core:'Gia đình — trật tự và vai trò rõ ràng trong nhà',
+  ext:'Gia Nhân là quẻ của gia đình và tổ chức gia đình. Như gió thổi từ lửa — gia đình cần có trật tự, vai trò rõ ràng, và sự ấm áp của kết nối. Mỗi người biết vị trí của mình.',
+  ctx:{business:'Tổ chức cần cấu trúc gia đình — mọi người biết vai trò và được ủng hộ.',investment:'Quản lý tài chính gia đình cần cấu trúc và sự đồng thuận.',relationship:'Mối quan hệ đang cần cấu trúc và cam kết rõ ràng hơn.',family:'Gia đình cần thiết lập vai trò rõ ràng hơn. Ai chịu trách nhiệm gì?',career:'Lãnh đạo bằng sự quan tâm thực sự — gần gũi với đội ngũ.',self_dev:'Cân bằng giữa trách nhiệm gia đình và phát triển bản thân.',decision:'Quyết định cần xét đến tác động gia đình và các vai trò trong nhà.'},
+  do:['Xác định vai trò và trách nhiệm rõ ràng','Xây dựng truyền thông trong gia đình','Dẫn dắt bằng sự ấm áp và nhất quán','Chăm sóc những người thân yêu'],
+  avoid:['Để vai trò và trách nhiệm mơ hồ','Lãnh đạo bằng sợ hãi','Bỏ qua những vấn đề nhỏ trong gia đình'],
+  det:{up:'Tốn trên — ảnh hưởng dịu dàng nhưng thấm sâu trong gia đình',lo:'Ly dưới — sự ấm áp và rõ ràng là nền tảng',int:'Sự ấm áp (Ly) được lan tỏa bởi gió (Tốn) — tạo ra bầu không khí gia đình',time:'Thời điểm xây dựng và củng cố gia đình'},
+  tags:['gia đình','vai trò','trật tự','ấm áp','hôn nhân ổn định']},
+{id:49,name:'Trạch Hỏa Cách',up:'doai',lo:'ly',sym:'䷰',
+  core:'Cách mạng — thay đổi căn bản, thời điểm đã chín muồi',
+  ext:'Cách là quẻ của sự thay đổi căn bản. Như mùa thay đổi — không thể tránh, không thể kéo dài. Khi thời điểm chín muồi, thay đổi là cần thiết và tốt đẹp.',
+  ctx:{business:'Cần thay đổi mô hình kinh doanh căn bản — thời điểm đã đến.',investment:'Cải cách danh mục đầu tư — một số thứ cần thay đổi căn bản.',relationship:'Mối quan hệ cần thay đổi căn bản hoặc kết thúc — thời điểm rõ ràng.',family:'Cần thay đổi cách tiếp cận trong gia đình — cái cũ không còn hiệu quả.',career:'Đã đến lúc chuyển ngành hoặc thay đổi hướng sự nghiệp.',self_dev:'Thay đổi căn bản về tư duy và thói quen — cần thiết và tốt đẹp.',decision:'Quyết định thay đổi lớn — đây là lúc. Đừng trì hoãn.'},
+  do:['Thực hiện thay đổi khi thời điểm đã chín','Chuẩn bị kỹ cho quá trình chuyển đổi','Truyền đạt tầm nhìn mới rõ ràng','Dũng cảm với thay đổi cần thiết'],
+  avoid:['Trì hoãn thay đổi vì sợ hãi','Thay đổi vội vàng khi chưa chuẩn bị','Thay đổi vì xu hướng không có lý do thật'],
+  det:{up:'Đoài trên — sự vui vẻ và tự tin trong thay đổi',lo:'Ly dưới — ánh sáng và nhận thức cho thấy thay đổi cần thiết',int:'Nhận thức rõ ràng (Ly) dẫn đến quyết định vui vẻ thay đổi (Đoài)',time:'Thời điểm đã chín — thay đổi ngay'},
+  tags:['thay đổi lớn','cách mạng','chuyển hướng','dũng cảm']},
+{id:20,name:'Phong Địa Quan',up:'ton',lo:'khon',sym:'䷓',
+  core:'Quan sát — chờ thời, nhìn trước hành động',
+  ext:'Quan là quẻ của sự quan sát và chiêm nghiệm. Như ngọn gió thổi qua đất — quan sát rộng trước khi hành động. Đây là giai đoạn nhìn lại, đánh giá, và chờ thời điểm đúng.',
+  ctx:{business:'Chưa phải lúc hành động lớn. Quan sát thị trường, đọc tình hình, chuẩn bị.',investment:'Quan sát và nghiên cứu trước khi vào. Đừng vội.',relationship:'Quan sát trước khi hành động. Đừng để cảm xúc quyết định.',family:'Quan sát kỹ trước khi can thiệp vào các vấn đề gia đình.',career:'Quan sát văn hóa và cơ hội trước khi hành động.',self_dev:'Thời điểm quan sát và học hỏi từ người khác — không cần hành động ngay.',decision:'Cần thêm thông tin và quan sát. Chưa đủ dữ liệu để quyết định.'},
+  do:['Quan sát kỹ trước khi hành động','Thu thập thông tin đầy đủ','Học từ người khác','Kiên nhẫn chờ thời điểm đúng'],
+  avoid:['Hành động khi chưa quan sát kỹ','Bỏ qua dấu hiệu và cảnh báo','Đánh giá nhanh mà thiếu chiều sâu'],
+  det:{up:'Tốn trên — quan sát từ góc cao, nhìn rộng',lo:'Khôn dưới — nền tảng vững, kiên nhẫn chờ',int:'Gió thổi qua đất — quan sát toàn cảnh trước khi can thiệp',time:'Giai đoạn quan sát — chưa phải lúc hành động'},
+  tags:['quan sát','chờ thời','chiêm nghiệm','phân tích','kiên nhẫn']},
+{id:24,name:'Địa Lôi Phục',up:'khon',lo:'chan',sym:'䷗',
+  core:'Quay trở lại — hồi phục và khởi đầu mới',
+  ext:'Phục là quẻ của sự hồi phục và trở về. Như mùa xuân sau đông giá — sức sống đang quay trở lại từ sâu bên trong. Đây là thời điểm tốt để bắt đầu lại.',
+  ctx:{business:'Sau giai đoạn khó, dấu hiệu phục hồi đang xuất hiện. Bắt đầu xây dựng lại.',investment:'Đáy đã qua. Thị trường đang có dấu hiệu phục hồi.',relationship:'Mối quan hệ đang phục hồi sau giai đoạn khó. Tận dụng để kết nối lại.',family:'Gia đình đang bắt đầu lại sau giai đoạn khó khăn.',career:'Sau giai đoạn khó khăn, cơ hội mới đang mở ra.',self_dev:'Hồi phục động lực và năng lượng — mùa xuân của tinh thần.',decision:'Đây là thời điểm tốt để bắt đầu lại. Đừng mang theo gánh nặng cũ.'},
+  do:['Nắm lấy dấu hiệu hồi phục','Bắt đầu lại từ nền tảng đúng','Kiên nhẫn với tiến trình hồi phục','Không hối tiếc về quá khứ'],
+  avoid:['Bỏ lỡ dấu hiệu hồi phục','Lao vào quá nhanh khi mới phục hồi','Mang theo gánh nặng cũ vào giai đoạn mới'],
+  det:{up:'Khôn trên — môi trường đất nuôi dưỡng mầm mới',lo:'Chấn dưới — năng lượng khởi đầu đang nổi lên từ bên trong',int:'Mầm sống từ dưới (Chấn) được nuôi dưỡng bởi đất mẹ (Khôn) — hồi phục tự nhiên',time:'Giai đoạn hồi phục — sẽ tăng tốc dần'},
+  tags:['hồi phục','khởi đầu lại','sau khó khăn','mùa xuân','mầm mới']},
+{id:46,name:'Địa Phong Thăng',up:'khon',lo:'ton',sym:'䷭',
+  core:'Thăng tiến — từng bước leo lên một cách tự nhiên',
+  ext:'Thăng là quẻ của sự thăng tiến từng bước. Như cây leo từ từ lên cao — không đột ngột nhưng bền vững. Đây là thời điểm tốt để tiến lên một cách kiên nhẫn.',
+  ctx:{business:'Doanh nghiệp đang leo dần lên — tiếp tục hướng này.',investment:'Tăng dần vị thế — không lao vào mà tiến từng bước.',relationship:'Mối quan hệ đang phát triển lên một tầm mới — từ từ và tự nhiên.',family:'Gia đình đang đạt đến trình độ mới trong sự gắn kết.',career:'Thăng tiến đang đến — nhưng cần từng bước và kiên nhẫn.',self_dev:'Tiến bộ từng bước — nhất quán và kiên nhẫn.',decision:'Tiến lên nhưng từng bước — không cần nhảy vọt.'},
+  do:['Tiến từng bước nhỏ nhưng nhất quán','Kiên nhẫn với tiến độ leo dần','Chú ý đến chất lượng từng bước','Tận dụng môi trường ủng hộ'],
+  avoid:['Muốn nhảy bước quá lớn','Mất kiên nhẫn vì tiến độ chậm','Bỏ qua bước cơ bản'],
+  det:{up:'Khôn trên — môi trường đang hỗ trợ sự thăng tiến',lo:'Tốn dưới — sự kiên nhẫn và thấm sâu tạo đà leo lên',int:'Sự thấm sâu (Tốn) được nuôi dưỡng bởi môi trường (Khôn) — thăng tiến tự nhiên',time:'Thăng tiến từ từ — nhưng chắc chắn'},
+  tags:['thăng tiến','leo từng bước','kiên nhẫn','nhất quán','tiến bộ']},
+{id:26,name:'Sơn Thiên Đại Súc',up:'can2',lo:'can',sym:'䷙',
+  core:'Tích lũy lớn — nội lực dồn ép chờ thời',
+  ext:'Đại Súc là quẻ của sự tích lũy lớn — nội lực rất mạnh nhưng chưa được giải phóng. Như núi đè lên bầu trời — sức mạnh đang được nén lại để chờ thời điểm đúng.',
+  ctx:{business:'Đang tích lũy kiến thức và nguồn lực cho bước bứt phá lớn. Chưa phải lúc.',investment:'Đang tích lũy vốn và kiến thức — kết quả sẽ đến khi thời điểm chín.',relationship:'Đang tích lũy nội lực trong mối quan hệ. Chưa phải lúc hành động lớn.',family:'Đang tích lũy nguồn lực cho gia đình — giai đoạn đầu tư.',career:'Tích lũy kinh nghiệm và kỹ năng — kết quả sẽ đến khi thời điểm chín.',self_dev:'Giai đoạn học sâu và tích lũy — đây là quá trình đầu tư quan trọng nhất.',decision:'Chưa đến lúc hành động — đang tích lũy đủ để quyết định tốt hơn.'},
+  do:['Tích lũy sâu và rộng','Học từ người giỏi nhất','Kiên nhẫn với giai đoạn tích lũy','Xây dựng nền tảng vững chắc'],
+  avoid:['Vội bứt phá khi chưa tích lũy đủ','Tự mãn với những gì đã học','Bỏ qua cơ hội học hỏi'],
+  det:{up:'Cấn trên — dừng lại và tích lũy, chưa phải lúc hành động',lo:'Càn dưới — sức mạnh lớn đang được nén giữ',int:'Sức mạnh lớn bị giữ lại bởi sự dừng — tạo ra áp suất tích lũy rất lớn',time:'Giai đoạn nén lại — càng nén lâu, lực bứt phá càng mạnh'},
+  tags:['tích lũy lớn','nội lực','chuẩn bị','học sâu','bứt phá sắp đến']},
+{id:35,name:'Hỏa Địa Tấn',up:'ly',lo:'khon',sym:'䷢',
+  core:'Tiến bước — ánh sáng mặt trời trên mặt đất, hanh tiến',
+  ext:'Tấn là quẻ của sự tiến bộ và thăng tiến. Như mặt trời mọc trên đất — ánh sáng lan rộng tự nhiên. Đây là thời điểm tiến lên, được công nhận, và mở rộng ảnh hưởng.',
+  ctx:{business:'Thời điểm mở rộng và phát triển. Thị trường đang ủng hộ.',investment:'Thị trường đang thuận — tận dụng đà tăng.',relationship:'Mối quan hệ đang phát triển tốt — tiến bước thêm.',family:'Gia đình đang tiến triển tốt — tận dụng đà này.',career:'Thời điểm thăng tiến và được ghi nhận. Hãy chủ động đề xuất và thể hiện.',self_dev:'Sự tiến bộ đang diễn ra rõ ràng — hãy tiếp tục và tự tin.',decision:'Tiến bước — điều kiện đang thuận lợi.'},
+  do:['Chủ động thể hiện và đề xuất','Tận dụng cơ hội được ghi nhận','Lan rộng ảnh hưởng tốt','Tiến bước với sự tự tin'],
+  avoid:['Khiêm tốn quá mức che giấu tiềm năng','Bỏ lỡ cơ hội vì sợ thất bại','Tiến quá nhanh không ổn định'],
+  det:{up:'Ly trên — ánh sáng và nhận thức đang dẫn đường',lo:'Khôn dưới — nền tảng vững chắc hỗ trợ sự tiến bước',int:'Ánh sáng tiến lên từ nền tảng ổn định — sự thăng tiến có gốc rễ',time:'Thời điểm tiến bước — tận dụng momentum'},
+  tags:['thăng tiến','tiến bộ','được ghi nhận','mở rộng','cơ hội tốt']},
+{id:47,name:'Trạch Thủy Khốn',up:'doai',lo:'kham',sym:'䷮',
+  core:'Khốn khó — bị vây hãm, nhưng giữ vững phẩm chất',
+  ext:'Khốn là quẻ của sự khốn khó bao vây. Hồ nước (Đoài) trên áp lực (Khảm) — khốn khó tứ phía nhưng người có phẩm chất vẫn giữ được tinh thần.',
+  ctx:{business:'Tình hình khó khăn nghiêm trọng — cần giữ vững tinh thần và tìm lối thoát.',investment:'Thua lỗ nặng — cần bình tĩnh và tìm cách phục hồi.',relationship:'Mối quan hệ đang bị vây hãm bởi khó khăn bên ngoài.',family:'Gia đình đang trong giai đoạn khó khăn toàn diện.',career:'Giai đoạn bế tắc sự nghiệp — cần giữ phẩm chất và tìm cơ hội.',self_dev:'Giai đoạn thử thách phẩm cách — kiên trì và không bỏ cuộc.',decision:'Không phải lúc quyết định lớn. Giải quyết khốn khó trước.'},
+  do:['Giữ vững phẩm chất trong khó khăn','Tìm lối thoát sáng tạo','Tin vào bản thân khi hoàn cảnh không tin'],
+  avoid:['Buông bỏ phẩm chất vì hoàn cảnh','Đổ lỗi hoàn toàn cho bên ngoài','Bỏ cuộc khi chưa thử hết các hướng'],
+  det:{up:'Đoài trên — cố giữ tinh thần trong khi đang bị vây hãm',lo:'Khảm dưới — áp lực đang chặn từ dưới',int:'Bị vây hãm từ hai phía — nhưng đây là thử thách phẩm cách',time:'Giai đoạn khó nhất — nhưng sẽ qua. Phẩm cách được rèn trong lửa'},
+  tags:['khốn khó','bế tắc','thử thách phẩm cách','kiên trì']},
+{id:52,name:'Thuần Cấn',up:'can2',lo:'can2',sym:'䷳',
+  core:'Dừng lại — tĩnh lặng là sức mạnh',
+  ext:'Thuần Cấn là quẻ của sự dừng lại hoàn toàn. Như núi — không di chuyển không phải yếu đuối mà là sức mạnh. Thời điểm thiền định, nhìn lại, và tĩnh tại.',
+  ctx:{business:'Dừng lại đánh giá lại chiến lược. Không phải lúc mở rộng.',investment:'Không giao dịch trong giai đoạn này. Dừng lại và đánh giá.',relationship:'Cần không gian và thời gian tĩnh lặng trong mối quan hệ.',family:'Gia đình cần thời gian tĩnh lặng và nhìn lại.',career:'Dừng lại và đánh giá lại hướng đi. Không cần hành động ngay.',self_dev:'Thời điểm thiền định và nhìn lại. Bên trong có câu trả lời.',decision:'Dừng lại trước khi quyết định. Im lặng và lắng nghe bên trong.'},
+  do:['Dừng lại và nghỉ ngơi thật sự','Thiền định và nhìn vào bên trong','Tĩnh lặng trong khi thế giới ồn ào','Biết khi nào nên không làm gì'],
+  avoid:['Tiếp tục hành động khi cần dừng','Lấp đầy sự im lặng bằng ồn ào','Sợ sự tĩnh lặng'],
+  det:{up:'Cấn trên — sự dừng lại từ bên ngoài',lo:'Cấn dưới — sự dừng lại từ bên trong',int:'Dừng lại hoàn toàn — bên trong và bên ngoài — thời điểm của sự tĩnh lặng sâu',time:'Thời điểm dừng lại — không phải lúc hành động'},
+  tags:['dừng lại','thiền định','tĩnh lặng','nghỉ ngơi','nhìn lại']},
+{id:15,name:'Địa Sơn Khiêm',up:'khon',lo:'can2',sym:'䷎',
+  core:'Khiêm tốn — sức mạnh thật sự không cần phô trương',
+  ext:'Khiêm là quẻ của sự khiêm nhường thật sự. Núi (Cấn) nằm dưới đất (Khôn) — sức mạnh ẩn mình. Người thật sự mạnh không cần chứng tỏ. Đây là một trong những quẻ tốt nhất.',
+  ctx:{business:'Thành công đến từ việc phục vụ tốt, không phải phô trương.',investment:'Âm thầm tích lũy — không cần phô trương chiến lược.',relationship:'Khiêm tốn và lắng nghe là nền tảng của mọi mối quan hệ tốt.',family:'Dẫn dắt gia đình bằng sự khiêm tốn và trầm tĩnh.',career:'Khiêm tốn và làm việc tốt sẽ được nhận ra.',self_dev:'Học hỏi trong khiêm tốn — không tự mãn ở bất kỳ giai đoạn nào.',decision:'Quyết định đúng không cần phô trương — hành động và để kết quả nói.'},
+  do:['Để kết quả nói thay cho lời nói','Lắng nghe nhiều hơn nói','Trân trọng đóng góp của người khác','Giữ thái độ học hỏi dù đang ở vị trí cao'],
+  avoid:['Phô trương thành tích','Coi thường người khác','Khiêm tốn giả tạo'],
+  det:{up:'Khôn trên — môi trường trân trọng sự khiêm nhường',lo:'Cấn dưới — sức mạnh ẩn, không phô trương',int:'Núi ẩn dưới đất — sức mạnh thật không cần hiện rõ',time:'Mọi thời điểm — khiêm tốn luôn phù hợp'},
+  tags:['khiêm tốn','ẩn mình','không phô trương','lắng nghe']},
+{id:48,name:'Thủy Phong Tỉnh',up:'kham',lo:'ton',sym:'䷯',
+  core:'Giếng nước — nguồn kiến thức sâu không cạn kiệt',
+  ext:'Tỉnh là quẻ của giếng nước — nguồn tài nguyên sâu và không cạn. Bạn đang có nguồn tài nguyên quý giá (kỹ năng, kiến thức, mạng lưới) — hãy khai thác và chia sẻ đúng cách.',
+  ctx:{business:'Doanh nghiệp có giá trị cốt lõi sâu — hãy khai thác và chia sẻ với thị trường.',investment:'Kiến thức đầu tư sâu là tài sản thật — hãy tin vào phân tích của mình.',relationship:'Mối quan hệ có chiều sâu và nguồn nuôi dưỡng dồi dào.',family:'Gia đình có nền tảng giá trị sâu — nguồn nuôi dưỡng không cạn.',career:'Bạn có kỹ năng và kiến thức sâu — đây là nguồn tài nguyên quý. Hãy khai thác.',self_dev:'Tiếp tục đào sâu vào kiến thức cốt lõi — đây là nguồn không cạn.',decision:'Tin vào kiến thức và kinh nghiệm sâu của mình khi quyết định.'},
+  do:['Đào sâu vào kiến thức cốt lõi','Chia sẻ kiến thức với người khác','Duy trì và bảo dưỡng nguồn tài nguyên'],
+  avoid:['Để nguồn tài nguyên cạn kiệt vì không chăm sóc','Ích kỷ không chia sẻ','Phân tán năng lượng thay vì đào sâu'],
+  det:{up:'Khảm trên — sự sâu thẳm và giá trị ẩn bên trong',lo:'Tốn dưới — thấm sâu để khai thác nguồn tài nguyên',int:'Thấm sâu vào nguồn không cạn — giống giếng nước ngầm',time:'Mọi thời điểm — nguồn tốt không cạn theo thời gian'},
+  tags:['kiến thức sâu','chuyên môn','chia sẻ','khai thác','nguồn tài nguyên']},
+{id:64,name:'Hỏa Thủy Vị Tế',up:'ly',lo:'kham',sym:'䷿',
+  core:'Chưa hoàn thành — tiếp tục tiến với sự tỉnh táo',
+  ext:'Vị Tế là quẻ cuối cùng trong Kinh Dịch — không phải kết thúc mà là sự chuẩn bị cho chu kỳ mới. Mọi thứ chưa hoàn thành — đây là trạng thái bình thường của cuộc sống.',
+  ctx:{business:'Còn nhiều điều cần làm. Tiếp tục với sự tỉnh táo và kiên nhẫn.',investment:'Hành trình đầu tư còn dài — đây chỉ là một điểm trên đường đi.',relationship:'Mối quan hệ luôn trong quá trình phát triển — không bao giờ hoàn hảo.',family:'Gia đình luôn trong quá trình phát triển và gắn kết.',career:'Hành trình sự nghiệp còn dài — đây chỉ là một giai đoạn.',self_dev:'Chưa bao giờ hoàn thành việc phát triển bản thân — đó là điều tốt.',decision:'Chưa hoàn thành tất cả — nhưng đủ để tiến bước tiếp theo.'},
+  do:['Tiếp tục tiến với sự tỉnh táo','Chấp nhận rằng không có gì hoàn hảo','Học từ mỗi bước và tiếp tục'],
+  avoid:['Bỏ cuộc vì chưa hoàn hảo','Chờ đến khi hoàn hảo mới bắt đầu','Mất phương hướng trong hành trình dài'],
+  det:{up:'Ly trên — ánh sáng và tầm nhìn dẫn đường',lo:'Khảm dưới — thử thách vẫn còn, hành trình chưa kết thúc',int:'Ánh sáng soi sáng những thử thách còn lại — tiếp tục với tỉnh táo',time:'Hành trình vẫn tiếp tục — đây là trạng thái bình thường'},
+  tags:['chưa hoàn thành','tiếp tục','hành trình','kiên nhẫn']},
+];
+
+// Build lookup maps
+const HEX_BY_UD = {};
+const HEX_BY_ID = {};
+HEX.forEach(h=>{HEX_BY_UD[h.up+'_'+h.lo]=h; HEX_BY_ID[h.id]=h;});
+
+// Fill remaining 64 - generate basic entries for cells we don't have full data
+const ALL_HEX_MAP = {}; // up_lo -> {name, id, core}
+const FULL_MATRIX = [
+  // row: lower trigram (can,doai,ly,chan,ton,kham,can2,khon)
+  // col: upper trigram (can,doai,ly,chan,ton,kham,can2,khon)
+  ['Thuần Càn','Trạch Thiên Quyết','Hỏa Thiên Đại Hữu','Lôi Thiên Đại Tráng','Phong Thiên Tiểu Súc','Thủy Thiên Nhu','Sơn Thiên Đại Súc','Địa Thiên Thái'],
+  ['Thiên Trạch Lý','Thuần Đoài','Hỏa Trạch Khuê','Lôi Trạch Quy Muội','Phong Trạch Trung Phu','Thủy Trạch Tiết','Sơn Trạch Tổn','Địa Trạch Lâm'],
+  ['Thiên Hỏa Đồng Nhân','Trạch Hỏa Cách','Thuần Ly','Lôi Hỏa Phong','Phong Hỏa Gia Nhân','Thủy Hỏa Ký Tế','Sơn Hỏa Bí','Địa Hỏa Minh Di'],
+  ['Thiên Lôi Vô Vọng','Trạch Lôi Tùy','Hỏa Lôi Phệ Hạp','Thuần Chấn','Phong Lôi Ích','Thủy Lôi Truân','Sơn Lôi Di','Địa Lôi Phục'],
+  ['Thiên Phong Cấu','Trạch Phong Đại Quá','Hỏa Phong Đỉnh','Lôi Phong Hằng','Thuần Tốn','Thủy Phong Tỉnh','Sơn Phong Cổ','Địa Phong Thăng'],
+  ['Thiên Thủy Tụng','Trạch Thủy Khốn','Hỏa Thủy Vị Tế','Lôi Thủy Giải','Phong Thủy Hoán','Thuần Khảm','Sơn Thủy Kiển','Địa Thủy Tỷ'],
+  ['Thiên Sơn Độn','Trạch Sơn Hàm','Hỏa Sơn Lữ','Lôi Sơn Tiểu Quá','Phong Sơn Tiệm','Thủy Sơn Kiển','Thuần Cấn','Địa Sơn Khiêm'],
+  ['Địa Thiên Thái','Địa Trạch Lâm','Địa Hỏa Minh Di','Địa Lôi Phục','Địa Phong Thăng','Địa Thủy Sư','Địa Sơn Khiêm','Thuần Khôn'],
+];
+const SHORT_MEANINGS = [
+  ['Sức mạnh thuần, tiến mạnh','Quyết đoán dứt khoát','Thịnh vượng lớn','Sức mạnh lớn cần kiểm soát','Tích lũy nhỏ, kiên nhẫn','Chờ đợi đúng cách','Tích lũy lớn nội lực','Hanh thông thuận lợi'],
+  ['Bước đi cẩn thận','Niềm vui thuần kết nối','Bất đồng tìm điểm chung','Cam kết vội cẩn thận','Tin tưởng thành thật','Tiết chế đúng mức','Giảm thiểu tập trung','Gần gũi tiếp cận'],
+  ['Hòa đồng cùng chí hướng','Cải cách thay đổi lớn','Sáng rõ tỏa sáng','Sung mãn đỉnh điểm','Gia đình trật tự rõ','Đã hoàn thành cẩn thận','Vẻ đẹp hình thức nội dung','Ánh sáng bị che ẩn nhẫn'],
+  ['Không mưu tính hành động thuần','Đi theo thuận thời','Cắn xé xử lý vấn đề','Chấn động thức tỉnh','Ích lợi tăng trưởng','Khởi đầu gian nan','Nuôi dưỡng chú ý','Quay trở lại hồi phục'],
+  ['Gặp gỡ cơ hội cẩn thận','Vượt giới hạn liều lĩnh','Vạc đỉnh thành tựu','Bền vững cam kết lâu dài','Thuận theo linh hoạt','Giếng nước nguồn sâu','Sửa chữa cải cách','Thăng tiến từng bước'],
+  ['Tranh chấp thương lượng','Khốn khó giữ phẩm chất','Chưa hoàn thành tiếp tục','Giải phóng hành động ngay','Phân tán tan chảy rào cản','Nguy hiểm giữ vững','Trắc trở tìm đường vòng','Đoàn kết cùng nhau'],
+  ['Rút lui chiến lược','Cảm ứng gặp gỡ tâm đầu','Lữ hành tạm bợ cẩn thận','Chú ý nhỏ thận trọng','Tiệm tiến bền vững','Trắc trở cần trợ giúp','Dừng lại tĩnh lặng mạnh','Suy tàn buông bỏ cũ'],
+  ['Hanh thông trời đất gặp','Tiếp cận gần gũi','Ánh sáng bị che ẩn nhẫn','Quay trở lại hồi phục','Thăng tiến từng bước','Đội quân kỷ luật','Khiêm nhường sức mạnh ẩn','Tiếp nhận nuôi dưỡng'],
+];
+// Build matrix lookup
+MX_ORDER.forEach((lo,ri)=>{
+  MX_ORDER.forEach((up,ci)=>{
+    const key = up+'_'+lo;
+    if(!ALL_HEX_MAP[key]) ALL_HEX_MAP[key]={name:FULL_MATRIX[ri][ci], core:SHORT_MEANINGS[ri][ci]};
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════
+// MAPPING ENGINE
+// ═══════════════════════════════════════════════════════════════
+const CAT_KW = {
+  business:['kinh doanh','công ty','doanh nghiệp','khởi nghiệp','startup','hợp đồng','đối tác','khách hàng','thị trường','cạnh tranh','sản phẩm','dịch vụ','doanh thu','lợi nhuận','bán hàng','thương hiệu','mở rộng','mở cửa hàng','mở quán'],
+  investment:['đầu tư','chứng khoán','cổ phiếu','crypto','bitcoin','vnindex','bất động sản','nhà đất','cho thuê','lãi suất','danh mục','tài chính','tiết kiệm','vàng','vốn','thị trường tài chính'],
+  relationship:['tình yêu','người yêu','bạn trai','bạn gái','yêu','chia tay','hôn nhân','cưới','kết hôn','hẹn hò','quan hệ tình cảm','tình cảm','ly hôn','ghen tuông'],
+  family:['gia đình','bố mẹ','cha mẹ','con cái','anh chị em','ông bà','vợ','chồng','nuôi con','dạy con','chăm sóc gia đình','mâu thuẫn gia đình'],
+  career:['công việc','việc làm','nghề nghiệp','thăng tiến','thay đổi việc','nhảy việc','xin việc','sa thải','mất việc','tăng lương','đồng nghiệp','sếp','phỏng vấn','chuyển ngành','sự nghiệp'],
+  health:['sức khỏe','bệnh','đau','chữa bệnh','bác sĩ','bệnh viện','ăn uống','tập luyện','stress','lo lắng','trầm cảm','mất ngủ','kiệt sức','burnout','mệt mỏi'],
+  self_dev:['phát triển bản thân','học','học hỏi','đọc sách','kỹ năng','tư duy','thói quen','mục tiêu','kế hoạch','định hướng','ý nghĩa','cải thiện bản thân','phát triển tư duy'],
+  decision:['quyết định','lựa chọn','nên hay không','có nên','phân vân','băn khoăn','không biết nên','tư vấn','chọn'],
+};
+const CAT_HEX = {
+  business:[3,1,11,49,35,26,5,14],
+  investment:[5,11,20,47,24,26,63,4],
+  relationship:[32,11,37,31,49,15,4,29],
+  family:[37,11,4,32,15,29,52,48],
+  career:[35,46,49,1,26,4,15,5],
+  health:[27,52,29,47,28,60,24,4],
+  self_dev:[4,26,48,15,53,5,25,32],
+  decision:[11,5,20,1,43,49,64,32],
+  general:[4,11,5,1,2,15,64,32],
+};
+const MODIFIERS = [
+  {kw:['khó khăn','khủng hoảng','áp lực','nguy hiểm','rủi ro','sợ','lo lắng'],ids:[29,47,3],w:3},
+  {kw:['cơ hội','thuận lợi','tốt','phát triển','lạc quan'],ids:[11,14,1,35],w:2},
+  {kw:['chờ đợi','kiên nhẫn','chưa biết','chưa rõ','thời điểm'],ids:[5,20,4],w:2},
+  {kw:['thay đổi','chuyển','mới','đổi mới'],ids:[49,24,46],w:2},
+  {kw:['dừng lại','nghỉ','nhìn lại','suy nghĩ lại'],ids:[52,20,15],w:2},
+  {kw:['mất','thua','thất bại','khốn','bế tắc'],ids:[47,29,12],w:3},
+  {kw:['thành công','đỉnh cao','đạt','hoàn thành'],ids:[14,11,35],w:2},
+  {kw:['hôn nhân','cưới','kết hôn','gia đình mới'],ids:[11,32,37],w:3},
+  {kw:['con cái','nuôi con','dạy con'],ids:[4,37,48],w:3},
+  {kw:['học','tích lũy','phát triển bản thân','tư duy'],ids:[4,26,48],w:2},
+];
+
+function normalize(t){return t.toLowerCase().replace(/[.,!?;:"""''()[\]{}]/g,' ');}
+function scoreKw(text,kws){let s=0;kws.forEach(k=>{if(text.includes(k))s+=k.split(' ').length;});return s;}
+function detectCat(input){
+  const t=normalize(input); let best='general',bestS=0;
+  Object.entries(CAT_KW).forEach(([c,kws])=>{const s=scoreKw(t,kws);if(s>bestS){bestS=s;best=c;}});
+  return best;
+}
+const CAT_LABELS = {business:'Kinh doanh',investment:'Đầu tư / Tài chính',relationship:'Tình cảm / Hôn nhân',family:'Gia đình',career:'Sự nghiệp',health:'Sức khỏe',self_dev:'Phát triển bản thân',decision:'Ra quyết định',general:'Tổng quát'};
+const CAT_COLORS = {business:'#FEF3E2 #5C3A10',investment:'#EDF5E1 #2A5014',relationship:'#FCEAEA #680A0A',family:'#E2F5EE #0A4030',career:'#E8F2FC #0A3060',health:'#EDF5E1 #2A5014',self_dev:'#EEEDFB #20185A',decision:'#FEF0EC #5A2010',general:'#EFEDE6 #2A2820'};
+
+function mapInput(input){
+  const t=normalize(input), cat=detectCat(t);
+  const cands=CAT_HEX[cat];
+  const scored=cands.map((id,ri)=>{
+    let s=0;
+    MODIFIERS.forEach(m=>{const kh=scoreKw(t,m.kw);if(kh>0&&m.ids.includes(id))s+=kh*m.w;});
+    return {id,s:s-ri*0.5};
+  });
+  scored.sort((a,b)=>b.s-a.s);
+  const hex=HEX_BY_ID[scored[0].id]||HEX[3]; // fallback Mông
+  const matched=[];
+  [...(CAT_KW[cat]||[]),...MODIFIERS.flatMap(m=>m.kw)].forEach(k=>{if(t.includes(k))matched.push(k);});
+  return {cat,hex,matched:[...new Set(matched)]};
+}
+
+// ═══════════════════════════════════════════════════════════════
+// HISTORY (localStorage)
+// ═══════════════════════════════════════════════════════════════
+function loadHistory(){try{return JSON.parse(localStorage.getItem('minhDichHistory')||'[]');}catch{return[];}}
+function saveToHistory(input,cat,hexName,hexId){
+  const h=loadHistory();
+  h.unshift({id:Date.now(),ts:Date.now(),input,cat,hexName,hexId});
+  try{localStorage.setItem('minhDichHistory',JSON.stringify(h.slice(0,100)));}catch{}
+}
+
+// ═══════════════════════════════════════════════════════════════
+// RENDER — TRIGRAM GRID
+// ═══════════════════════════════════════════════════════════════
+function renderTrigramGrid(){
+  const grid=document.getElementById('trigramGrid');
+  grid.innerHTML='';
+  TG_LIST.forEach(id=>{
+    const t=TRIGRAMS[id];
+    const c=t.css;
+    const div=document.createElement('div');
+    div.className='tg-card';
+    div.style.cssText=`background:${c.bg};border-color:${c.bd}`;
+    div.onclick=()=>showTgDetail(id);
+    div.innerHTML=`<div class="tg-sym">${t.sym}</div>
+      <div class="tg-name" style="color:${c.tx}">${t.name}</div>
+      <div class="tg-el" style="color:${c.tx}">${t.el}</div>
+      <div class="tg-tags">${t.kw.slice(0,3).map(k=>`<span class="tg-tag" style="background:${c.bd}33;color:${c.tx}">${k}</span>`).join('')}</div>`;
+    grid.appendChild(div);
+  });
+}
+function showTgDetail(id){
+  const t=TRIGRAMS[id]; const c=t.css;
+  document.querySelectorAll('.tg-card').forEach(el=>el.style.borderWidth='1.5px');
+  document.getElementById('td-sym').textContent=t.sym;
+  document.getElementById('td-name').textContent=t.name;
+  document.getElementById('td-name').style.color=c.tx;
+  document.getElementById('td-el').textContent=t.el;
+  document.getElementById('td-nature').textContent=t.nature;
+  document.getElementById('td-kws').innerHTML=t.kw.map(k=>`<span class="tg-tag" style="background:${c.bg};color:${c.tx};border:1px solid ${c.bd}33">${k}</span>`).join('');
+  document.getElementById('td-desc').textContent=t.desc;
+  document.getElementById('td-life').textContent=t.life;
+  const detail=document.getElementById('trigramDetail');
+  detail.classList.add('open');
+  detail.style.borderLeftColor=c.bd;
+}
+function closeTgDetail(){document.getElementById('trigramDetail').classList.remove('open');}
+
+// ═══════════════════════════════════════════════════════════════
+// RENDER — MATRIX
+// ═══════════════════════════════════════════════════════════════
+function renderMatrix(){
+  const grid=document.getElementById('matrixGrid');
+  grid.innerHTML='';
+  // corner
+  const corner=document.createElement('div');corner.className='mx-cell corner';grid.appendChild(corner);
+  // col headers
+  MX_ORDER.forEach((tid,ci)=>{
+    const t=TRIGRAMS[tid];const c=t.css;
+    const el=document.createElement('div');
+    el.className='mx-cell col-hd';
+    el.style.cssText=`background:${c.bg};color:${c.tx}`;
+    el.textContent=MX_LABELS[ci];
+    grid.appendChild(el);
+  });
+  // rows
+  MX_ORDER.forEach((loId,ri)=>{
+    const lt=TRIGRAMS[loId];const lc=lt.css;
+    // row header
+    const rh=document.createElement('div');
+    rh.className='mx-cell row-hd';
+    rh.style.cssText=`background:${lc.bg};color:${lc.tx};font-size:11px`;
+    rh.textContent=MX_LABELS[ri];
+    grid.appendChild(rh);
+    MX_ORDER.forEach((upId,ci)=>{
+      const ut=TRIGRAMS[upId];const uc=ut.css;
+      const isDiag=ri===ci;
+      const key=upId+'_'+loId;
+      const hexData=HEX_BY_UD[key]||ALL_HEX_MAP[key];
+      const cell=document.createElement('div');
+      cell.className='mx-cell';
+      cell.style.cssText=`background:${isDiag?uc.bd:uc.bg};color:${isDiag?'#fff':uc.tx}`;
+      cell.innerHTML=isDiag?`<span style="font-size:14px">${ut.sym}</span>`:'·';
+      cell.title=hexData?hexData.name:'';
+      cell.onclick=()=>showMxPreview(upId,loId,ri,ci);
+      cell.onmouseenter=()=>showMxPreview(upId,loId,ri,ci);
+      grid.appendChild(cell);
+    });
+  });
+}
+function showMxPreview(upId,loId,ri,ci){
+  const key=upId+'_'+loId;
+  const hexData=HEX_BY_UD[key]||ALL_HEX_MAP[key];
+  if(!hexData)return;
+  const prev=document.getElementById('matrixPreview');
+  prev.innerHTML=`<div class="mx-preview-name">${hexData.name}</div>
+    <div class="mx-preview-meta">${MX_LABELS[ri]} dưới · ${MX_LABELS[ci]} trên</div>
+    <div class="mx-preview-meaning">${hexData.core}</div>`;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// RENDER — INPUT PANEL
+// ═══════════════════════════════════════════════════════════════
+const EXAMPLES=[
+  'Tôi đang ở giai đoạn tích lũy bản thân, học phát triển tư duy nhưng gia đình thúc ép cưới và công việc chưa ổn định.',
+  'Muốn khởi nghiệp nhưng thị trường đang khó khăn, vốn còn ít, không biết có nên tiến tiếp không.',
+  'Đang phân vân có nên nhảy việc sang công ty mới — lương cao hơn nhưng môi trường chưa biết.',
+  'Đang cân nhắc đầu tư vào chứng khoán nhưng thị trường biến động mạnh.',
+  'Mối quan hệ với người yêu đang gặp vấn đề, cả hai đang bất đồng nhiều.',
+];
+function renderExamples(){
+  const wrap=document.getElementById('ipExamples');
+  wrap.innerHTML=EXAMPLES.map((e,i)=>`<button class="ip-ex" onclick="setExample(${i})"><span class="ip-ex-num">${i+1}.</span>${e.length>85?e.slice(0,85)+'…':e}</button>`).join('');
+}
+function setExample(i){
+  const ta=document.getElementById('ipTextarea');
+  ta.value=EXAMPLES[i];
+  ta.dispatchEvent(new Event('input'));
+}
+document.getElementById('ipTextarea').addEventListener('input',function(){
+  const v=this.value;
+  document.getElementById('ipChar').textContent=v.length+'/1000';
+  document.getElementById('ipSubmit').disabled=v.trim().length<10;
+  const cat=document.getElementById('ipCat');
+  if(v.trim().length>10){
+    const c=detectCat(v);
+    const [bg,tx]=CAT_COLORS[c].split(' ');
+    cat.style.cssText=`background:${bg};color:${tx};display:inline-block`;
+    cat.textContent=CAT_LABELS[c];
+  } else {cat.style.display='none';}
+});
+document.getElementById('ipTextarea').addEventListener('keydown',function(e){
+  if((e.metaKey||e.ctrlKey)&&e.key==='Enter')doReading();
+});
+
+// ═══════════════════════════════════════════════════════════════
+// RENDER — READING OUTPUT
+// ═══════════════════════════════════════════════════════════════
+let lastResult=null;
+function doReading(){
+  const input=document.getElementById('ipTextarea').value.trim();
+  if(input.length<10)return;
+  const out=document.getElementById('readingOut');
+  out.innerHTML=`<div class="ro-loading"><div class="ro-loading-sym">☯</div><div class="ro-loading-text">Đang tìm quẻ phù hợp...</div></div>`;
+  setTimeout(()=>{
+    const result=mapInput(input);
+    lastResult={input,result};
+    renderReading(input,result);
+  },450);
+}
+function renderReading(input,{cat,hex,matched}){
+  const out=document.getElementById('readingOut');
+  const up=TRIGRAMS[hex.up]; const lo=TRIGRAMS[hex.lo];
+  const uc=up.css; const lc=lo.css;
+  const ctx=hex.ctx[cat]||hex.ext;
+  const [catBg,catTx]=CAT_COLORS[cat].split(' ');
+  out.innerHTML=`
+  <div class="rc-echo">
+    <div class="rc-echo-label">Tình huống của bạn</div>
+    <div class="rc-echo-text">${input}</div>
+    <div class="rc-echo-foot">
+      <span class="rc-badge" style="background:${catBg};color:${catTx}">${CAT_LABELS[cat]}</span>
+      ${matched.length>0?`<span class="rc-conf">Từ khóa: ${matched.slice(0,4).join(', ')}</span>`:''}
+    </div>
+  </div>
+
+  <div class="rc-hex-head">
+    <div class="rc-hex-sym">${hex.sym}</div>
+    <div>
+      <div class="rc-hex-label">Quẻ kép phù hợp</div>
+      <div class="rc-hex-name">${hex.name}</div>
+      <div class="rc-hex-core">${hex.core}</div>
+    </div>
+  </div>
+
+  <div class="rc-sec-label">Hai quẻ đơn cấu thành</div>
+  <div class="rc-tri-grid">
+    <div class="rc-tri-card" style="background:${uc.bg};border-left-color:${uc.bd}">
+      <div class="rc-tri-role" style="color:${uc.tx}">Quẻ trên (môi trường)</div>
+      <div class="rc-tri-sym">${up.sym}</div>
+      <div class="rc-tri-name" style="color:${uc.tx}">${up.name}</div>
+      <div class="rc-tri-el" style="color:${uc.tx}">${up.el}</div>
+      <div class="rc-tri-body" style="color:${uc.tx}">${hex.det.up}</div>
+    </div>
+    <div class="rc-tri-card" style="background:${lc.bg};border-left-color:${lc.bd}">
+      <div class="rc-tri-role" style="color:${lc.tx}">Quẻ dưới (nội tại)</div>
+      <div class="rc-tri-sym">${lo.sym}</div>
+      <div class="rc-tri-name" style="color:${lc.tx}">${lo.name}</div>
+      <div class="rc-tri-el" style="color:${lc.tx}">${lo.el}</div>
+      <div class="rc-tri-body" style="color:${lc.tx}">${hex.det.lo}</div>
+    </div>
+  </div>
+
+  <div class="rc-inter">
+    <div class="rc-inter-label">Tương tác hai quẻ</div>
+    <div class="rc-inter-body">${hex.det.int}</div>
+  </div>
+
+  <div class="rc-section">
+    <div class="rc-sec-label">Ý nghĩa đầy đủ</div>
+    <div class="rc-body">${hex.ext}</div>
+  </div>
+
+  ${ctx!==hex.ext?`<div class="rc-context">
+    <div class="rc-context-label">Áp dụng vào tình huống của bạn</div>
+    <div class="rc-context-body">${ctx}</div>
+  </div>`:''}
+
+  <div class="rc-section">
+    <div class="rc-sec-label">Thời điểm</div>
+    <div class="rc-timing">${hex.det.time}</div>
+  </div>
+
+  <div class="rc-actions">
+    <div class="rc-do">
+      <div class="rc-action-title">✓ Nên làm</div>
+      <div class="rc-action-list">${hex.do.map(a=>`<div class="rc-action-item"><span class="rc-action-arrow">→</span><span>${a}</span></div>`).join('')}</div>
+    </div>
+    <div class="rc-avoid">
+      <div class="rc-action-title">✕ Nên tránh</div>
+      <div class="rc-action-list">${hex.avoid.map(a=>`<div class="rc-action-item"><span class="rc-action-arrow">✕</span><span>${a}</span></div>`).join('')}</div>
+    </div>
+  </div>
+
+  <div class="rc-tags">${hex.tags.map(t=>`<span class="rc-tag">${t}</span>`).join('')}</div>
+
+  <div class="rc-btns">
+    <button class="rc-btn-save" id="saveBtn" onclick="saveReading()">Lưu lại</button>
+    <button class="rc-btn-reset" onclick="resetReading()">Nhập tình huống mới</button>
+  </div>`;
+}
+function saveReading(){
+  if(!lastResult)return;
+  const {input,result:{cat,hex}}=lastResult;
+  saveToHistory(input,cat,hex.name,hex.id);
+  const btn=document.getElementById('saveBtn');
+  btn.textContent='✓ Đã lưu';btn.classList.add('saved');
+  setTimeout(()=>{btn.textContent='Lưu lại';btn.classList.remove('saved');},2000);
+}
+function resetReading(){
+  document.getElementById('readingOut').innerHTML=`<div class="ro-empty"><div class="ro-empty-sym">☯</div><div class="ro-empty-text">Nhập tình huống bên trái<br>kết quả sẽ xuất hiện ở đây</div></div>`;
+  document.getElementById('ipTextarea').value='';
+  document.getElementById('ipSubmit').disabled=true;
+  document.getElementById('ipChar').textContent='0/1000';
+  document.getElementById('ipCat').style.display='none';
+  lastResult=null;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// RENDER — HISTORY
+// ═══════════════════════════════════════════════════════════════
+function renderHistory(){
+  const h=loadHistory();
+  const sub=document.getElementById('histSub');
+  const list=document.getElementById('histList');
+  sub.textContent=h.length>0?`${h.length} lần tra gần nhất`:'Chưa có lịch sử. Hãy tra quẻ và bấm "Lưu lại".';
+  if(!h.length){list.innerHTML='<div class="hist-empty">Lịch sử trống.</div>';return;}
+  list.innerHTML=h.map(e=>{
+    const d=new Date(e.ts).toLocaleDateString('vi-VN',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+    return `<div class="hist-card">
+      <div class="hist-top"><div class="hist-name">${e.hexName}</div><div class="hist-date">${d}</div></div>
+      <div class="hist-input">${e.input}</div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════════════════
+document.querySelectorAll('.nav-btn').forEach(btn=>{
+  btn.onclick=()=>{
+    const v=btn.dataset.view;
+    document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.view').forEach(el=>el.classList.remove('active'));
+    document.getElementById('v-'+v).classList.add('active');
+    if(v==='history')renderHistory();
+  };
+});
+
+
+// ═══════════════════════════════════════════════════════════════
+// CONCEPTS — accordion & principle toggle
+// ═══════════════════════════════════════════════════════════════
+function toggleSection(id){
+  const body=document.getElementById('body-'+id);
+  const arr=document.getElementById('arr-'+id);
+  const open=body.classList.toggle('open');
+  if(arr) arr.classList.toggle('open',open);
+}
+function openSection(id){
+  // switch to concepts view first
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.view==='concepts'));
+  document.querySelectorAll('.view').forEach(el=>el.classList.toggle('active',el.id==='v-concepts'));
+  // ensure section is open
+  const body=document.getElementById('body-'+id);
+  const arr=document.getElementById('arr-'+id);
+  if(body&&!body.classList.contains('open')){body.classList.add('open');if(arr)arr.classList.add('open');}
+  setTimeout(()=>{const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});},80);
+}
+function togglePrinciple(card){
+  const wasActive=card.classList.contains('active');
+  document.querySelectorAll('.kn-pr-card').forEach(c=>c.classList.remove('active'));
+  if(!wasActive) card.classList.add('active');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════
+renderTrigramGrid();
+renderMatrix();
+renderExamples();
+</script>
+</body>
+</html>
